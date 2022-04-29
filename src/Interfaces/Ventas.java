@@ -33,8 +33,7 @@ public class Ventas extends javax.swing.JFrame {
         tblVenta.getTableHeader().setReorderingAllowed(false);
         this.setResizable(false);
         DesactivarBotones(false);
-        //this.setTitle("Ventas");
-        //this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        
 
     }
 
@@ -520,33 +519,29 @@ public class Ventas extends javax.swing.JFrame {
 
     private void txtTotalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTotalKeyTyped
         // TODO add your handling code here:
-       int key = evt.getKeyChar();
-       //System.out.println("tecla precionada: "+ key);
-       
-       boolean numeros = key >= 48 && key <= 57;
-       if(key == 46 && decimal == false)
-       {
-         decimal = true;
-         contador +=1;
-       }
-       if(decimal && numeros)
-       {
-           contador +=1;
-       }
-       
-       if(key == 8)
-       {
-           contador -= 1;
-           if (contador <= 0)
-           {
-            contador = 0;
-            decimal = false;
-           }
-       }
-       
+        int key = evt.getKeyChar();
+        //System.out.println("tecla precionada: "+ key);
+
+        boolean numeros = key >= 48 && key <= 57;
+        if (key == 46 && decimal == false) {
+            decimal = true;
+            contador += 1;
+        }
+        if (decimal && numeros) {
+            contador += 1;
+        }
+
+        if (key == 8) {
+            contador -= 1;
+            if (contador <= 0) {
+                contador = 0;
+                decimal = false;
+            }
+        }
+
         if (!numeros) {
             evt.consume();
-        } 
+        }
     }//GEN-LAST:event_txtTotalKeyTyped
 
     /**

@@ -8,61 +8,85 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class frmClientes extends javax.swing.JFrame {
+
     ConexionMySQL cnn = new ConexionMySQL();
     Connection cn = cnn.ConexionMySQL();
-    
+
     DefaultTableModel modelo;
     int filas;
-    
-    public frmClientes(){
-     initComponents();
-     Cargar(" ");
+
+    public frmClientes() {
+
+        initComponents();
+        Cargar(" ");
+        ActualizarInterfaz(false);
         this.setResizable(false);
         this.setTitle("Clientes");
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
     }
-   
-void Cargar (String Valor)
-       
-{
-   
-    
-    String Consulta = "select * from clientes "
-                  + "where concat (IDCliente, NombreCliente, "
-                  +" Direccion, Telefono ) "
-                  + "like '%" + Valor + "%' ";
-      
-      String [] Titulo = {"ID", "Cliente", 
-                                      "Direccion", "Telefono"};
-      String[] Registros = new String[9];
-      modelo = new DefaultTableModel(null, Titulo);
-      
-      try
-      {
+
+    void Cargar(String Valor) {
+
+        String Consulta = "select * from clientes "
+                + "where concat (IDCliente, NombreCliente, "
+                + " Direccion, Telefono ) "
+                + "like '%" + Valor + "%' ";
+
+        String[] Titulo = {"ID", "Cliente",
+            "Direccion", "Telefono"};
+        String[] Registros = new String[9];
+        modelo = new DefaultTableModel(null, Titulo){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        try {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(Consulta);
-            
-            while(rs.next()==true)
-            {
-                Registros [0] = rs.getString("IDCliente");
+
+            while (rs.next() == true) {
+                Registros[0] = rs.getString("IDCliente");
                 Registros[1] = rs.getString("NombreCliente");
-                Registros[2] =rs.getString("Direccion");
-                Registros[3] =   rs.getString("Telefono");
+                Registros[2] = rs.getString("Direccion");
+                Registros[3] = rs.getString("Telefono");
                 modelo.addRow(Registros);
             }
             tblClientes.setModel(modelo);
-      }
-      catch (Exception error)
-      {
-      JOptionPane.showMessageDialog(this,
-              "Error al cargar la tabla Clientes. "
-                + error.getMessage());
-      }
-}
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar la tabla Clientes. "
+                    + error.getMessage());
+        }
+    }
+
+    void ActualizarInterfaz(boolean activacion) {
+        txtIDCliente.setEnabled(activacion);
+        txtDireccion.setEnabled(activacion);
+        txtNombre.setEnabled(activacion);
+        txtTelefono.setEnabled(activacion);
+        btnActualizar.setEnabled(activacion);
+        btnEliminar.setEnabled(activacion);
+        btnGuardar.setEnabled(activacion);
+        btnCancelar.setEnabled(activacion);
+        
+        VaciarCampos();
+    }
+    
+    void VaciarCampos()
+    {
+        this.txtIDCliente.setText(" ");
+        this.txtNombre.setText(" ");
+        this.txtDireccion.setText(" ");
+        this.txtTelefono.setText(" ");
+    }
+
     /**
      * Creates new form frmClientes
      */
-   
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -88,6 +112,7 @@ void Cargar (String Valor)
         btnActualizar = new javax.swing.JButton();
         btnNuevo = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -177,6 +202,13 @@ void Cargar (String Valor)
             }
         });
 
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -211,7 +243,9 @@ void Cargar (String Valor)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(225, 225, 225)
+                        .addGap(49, 49, 49)
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34)
                         .addComponent(btnActualizar)
                         .addGap(41, 41, 41))))
         );
@@ -242,7 +276,8 @@ void Cargar (String Valor)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE))
+                    .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -270,127 +305,132 @@ void Cargar (String Valor)
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        
+
         String id, nom, dir, tel;
         String SQL;
         id = txtIDCliente.getText();
         nom = txtNombre.getText();
-        dir= txtDireccion.getText();
-        tel=txtTelefono.getText();
-        
+        dir = txtDireccion.getText();
+        tel = txtTelefono.getText();
+
         SQL = "insert into clientes"
-                +"( IDCliente , NombreCliente, "
+                + "( IDCliente , NombreCliente, "
                 + "Direccion, Telefono) "
                 + "values (?, ?, ?, ?)";
-        
-        try
-        {
-               PreparedStatement ps = cn.prepareStatement(SQL);
-               ps.setString (1, id);
-               ps.setString (2, nom);
-               ps.setString( 3, dir);
-               ps.setString (4, tel);
-               
-               int n = ps.executeUpdate();
-               if (n>0)  {
-                      JOptionPane.showMessageDialog(this,
-                              "cliente insertado");
-               }
-               Cargar("");
+
+        try {
+            PreparedStatement ps = cn.prepareStatement(SQL);
+            ps.setString(1, id);
+            ps.setString(2, nom);
+            ps.setString(3, dir);
+            ps.setString(4, tel);
+
+            int n = ps.executeUpdate();
+            if (n > 0) {
+                JOptionPane.showMessageDialog(this,
+                        "cliente insertado");
+            }
+            Cargar("");
+            VaciarCampos();
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al insertar; " + error);
         }
-        catch(Exception error)
-        {
-             JOptionPane.showMessageDialog(this, 
-                     "Error al insertar; " + error);
-        }
-         this.txtIDCliente.setText(" ");
-          this.txtNombre.setText(" ");
-          this.txtDireccion.setText(" ");
-          this.txtTelefono.setText(" ");
+        this.txtIDCliente.setText(" ");
+        this.txtNombre.setText(" ");
+        this.txtDireccion.setText(" ");
+        this.txtTelefono.setText(" ");
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void tblClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblClientesMouseClicked
         // TODO add your handling code here:
         int filaSele = tblClientes.getSelectedRow();
-        
+
         txtIDCliente.setText(
-                tblClientes.getValueAt  (filaSele, 0).toString());
+                tblClientes.getValueAt(filaSele, 0).toString());
         txtIDCliente.setEnabled(false);
         txtNombre.setText(
-                tblClientes.getValueAt  (filaSele, 1).toString());
+                tblClientes.getValueAt(filaSele, 1).toString());
         txtDireccion.setText(
-                tblClientes.getValueAt  (filaSele, 2).toString());
+                tblClientes.getValueAt(filaSele, 2).toString());
         txtTelefono.setText(
-                tblClientes.getValueAt  (filaSele, 3).toString());
-        
+                tblClientes.getValueAt(filaSele, 3).toString());
+
         filas = filaSele;
         
+        ActualizarInterfaz(true);
+        
+        
+
     }//GEN-LAST:event_tblClientesMouseClicked
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
 
-        try
-        {
-        String sql  = "update Clientes set  "
-                +" NombreCliente = ' " + txtNombre.getText()
-                +  " ', Direccion =  ' " + txtDireccion.getText()
-                + " ', Telefono = ' " + txtTelefono.getText()
-                + " ' where IDcliente= ' " + txtIDCliente.getText()
-                 + " ' ";
-        PreparedStatement ps =
-                        cn.prepareStatement(sql);
-        ps.executeUpdate();
-        Cargar(" ");
-        JOptionPane.showMessageDialog(this, 
-                      "Datos actualizados");
-     }
-    catch (Exception error)
-    {
-       JOptionPane.showMessageDialog(this, 
-                      "Error " + error.getMessage());
-    }
-              this.txtIDCliente.setText(" ");
-          this.txtNombre.setText(" ");
-          this.txtDireccion.setText(" ");
-          this.txtTelefono.setText(" ");
-       
+        try {
+            String sql = "update Clientes set  "
+                    + " NombreCliente = ' " + txtNombre.getText()
+                    + " ', Direccion =  ' " + txtDireccion.getText()
+                    + " ', Telefono = ' " + txtTelefono.getText()
+                    + " ' where IDcliente= ' " + txtIDCliente.getText()
+                    + " ' ";
+            PreparedStatement ps
+                    = cn.prepareStatement(sql);
+            ps.executeUpdate();
+            Cargar(" ");
+            JOptionPane.showMessageDialog(this,
+                    "Datos actualizados");
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(this,
+                    "Error " + error.getMessage());
+        }
+        this.txtIDCliente.setText(" ");
+        this.txtNombre.setText(" ");
+        this.txtDireccion.setText(" ");
+        this.txtTelefono.setText(" ");
+
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
+
+        this.txtIDCliente.setText(" ");
+        txtIDCliente.setEnabled(true);
+        this.txtNombre.setText(" ");
+        txtNombre.setEnabled(true);
+        this.txtDireccion.setText(" ");
+        txtDireccion.setEnabled(true);
+        this.txtTelefono.setText(" ");
+        txtTelefono.setEnabled(true);
         
-          this.txtIDCliente.setText(" ");
-              txtIDCliente.setEnabled(true);
-          this.txtNombre.setText(" ");
-          this.txtDireccion.setText(" ");
-          this.txtTelefono.setText(" ");
-          txtIDCliente.grabFocus();
+        btnGuardar.setEnabled(true);
+        btnCancelar.setEnabled(true);
+        
+        txtIDCliente.grabFocus();
 
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-       String SQL;
-       
-       SQL = "Delete from Clientes where IDCliente = '"+txtIDCliente.getText()+"' ";
-       
+        String SQL;
+
+        SQL = "Delete from Clientes where IDCliente = '" + txtIDCliente.getText() + "' ";
+
         try {
-              PreparedStatement ps = cn.prepareStatement(SQL);
-              int comp = 1  ;
-              comp = JOptionPane.showConfirmDialog(this, "Desea eliminar este registro");
-              System.out.println(comp);
-              if (comp == 0)
-              {
-                ps.execute();    
-              }
-    
+            PreparedStatement ps = cn.prepareStatement(SQL);
+            int comp = 1;
+            comp = JOptionPane.showConfirmDialog(this, "Desea eliminar este registro");
+            System.out.println(comp);
+            if (comp == 0) {
+                ps.execute();
+            }
+
         } catch (Exception e) {
         }
-         Cargar(" ");
-          this.txtIDCliente.setText(" ");
-          this.txtNombre.setText(" ");
-          this.txtDireccion.setText(" ");
-          this.txtTelefono.setText(" ");
+        Cargar(" ");
+        this.txtIDCliente.setText(" ");
+        this.txtNombre.setText(" ");
+        this.txtDireccion.setText(" ");
+        this.txtTelefono.setText(" ");
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void txtDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDireccionActionPerformed
@@ -399,16 +439,19 @@ void Cargar (String Valor)
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
-           String palabraBuscar;
-        palabraBuscar = JOptionPane.showInputDialog(null,"INGRESA LO QUE DESEA BUSCAR");
-        if(palabraBuscar == null || palabraBuscar == " ")
-        {
-        Cargar(" ");    
-        }else
-        {
+        String palabraBuscar;
+        palabraBuscar = JOptionPane.showInputDialog(null, "INGRESA LO QUE DESEA BUSCAR");
+        if (palabraBuscar == null || palabraBuscar == " ") {
+            Cargar(" ");
+        } else {
             Cargar(palabraBuscar);
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        ActualizarInterfaz(false);
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -449,6 +492,7 @@ void Cargar (String Valor)
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnNuevo;

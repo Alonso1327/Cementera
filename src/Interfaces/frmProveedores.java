@@ -8,61 +8,57 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class frmProveedores extends javax.swing.JFrame {
+
     ConexionMySQL cnn = new ConexionMySQL();
     Connection cn = cnn.ConexionMySQL();
-    
+
     DefaultTableModel modelo;
     int filas;
-    
-    public frmProveedores(){
-     initComponents();
-     Cargar("");
-            this.setResizable(false);
+
+    public frmProveedores() {
+        initComponents();
+        Cargar("");
+        this.setResizable(false);
         this.setTitle("PROVEEDORES");
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         tblProveedores.getTableHeader().setReorderingAllowed(false);
     }
-   
-void Cargar (String Valor)
-{
 
-        
-      String Consulta = "select * from Proveedores "
-                  + "where concat (IDProveedor, NombreProveedor, "
-                  +" Telefono,NombreEmpresa) "
-                  + "like '%" + Valor + "%' ";
-      
-      String [] Titulo = {"ID Proveedor", "Nombre Proveedor", 
-                                      "Telefono", "NombreEmpresa"};
-      String[] Registros = new String[9];
-      modelo = new DefaultTableModel(null, Titulo);
-      
-      try
-      {
+    void Cargar(String Valor) {
+
+        String Consulta = "select * from Proveedores "
+                + "where concat (IDProveedor, NombreProveedor, "
+                + " Telefono,NombreEmpresa) "
+                + "like '%" + Valor + "%' ";
+
+        String[] Titulo = {"ID Proveedor", "Nombre Proveedor",
+            "Telefono", "NombreEmpresa"};
+        String[] Registros = new String[9];
+        modelo = new DefaultTableModel(null, Titulo);
+
+        try {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(Consulta);
-            
-            while(rs.next()==true)
-            {
-                Registros [0] = rs.getString("IDProveedor");
+
+            while (rs.next() == true) {
+                Registros[0] = rs.getString("IDProveedor");
                 Registros[1] = rs.getString("NombreProveedor");
-                Registros[2] =rs.getString("Telefono");
-                Registros[3] =   rs.getString("NombreEmpresa");
+                Registros[2] = rs.getString("Telefono");
+                Registros[3] = rs.getString("NombreEmpresa");
                 modelo.addRow(Registros);
             }
             tblProveedores.setModel(modelo);
-      }
-      catch (Exception error)
-      {
-      JOptionPane.showMessageDialog(this,
-              "Error al cargar la tabla Proveedores. "
-                + error.getMessage());
-      }
-}
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar la tabla Proveedores. "
+                    + error.getMessage());
+        }
+    }
+
     /**
      * Creates new form frmClientes
      */
-   
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -290,121 +286,114 @@ void Cargar (String Valor)
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        
+
         String id, nom, tel, emp;
         String SQL;
         id = txtIDProveedor.getText();
         nom = txtNombreProveedor.getText();
-        tel= txtTelefono.getText();
-        emp=txtNombreEmpresa.getText();
-        
+        tel = txtTelefono.getText();
+        emp = txtNombreEmpresa.getText();
+
         SQL = "insert into Proveedores"
-                +"( IDProveedor , NombreProveedor, "
+                + "( IDProveedor , NombreProveedor, "
                 + "Telefono, NombreEmpresa) "
                 + "values (?, ?, ?, ?)";
-        
-        try
-        {
-               PreparedStatement ps = cn.prepareStatement(SQL);
-               ps.setString (1, id);
-               ps.setString (2, nom);
-               ps.setString( 3, tel);
-               ps.setString (4, emp);
-               
-               int n = ps.executeUpdate();
-               if (n>0)  {
-                      JOptionPane.showMessageDialog(this,
-                              "Proveedor insertado");
-               }
-               Cargar("");
+
+        try {
+            PreparedStatement ps = cn.prepareStatement(SQL);
+            ps.setString(1, id);
+            ps.setString(2, nom);
+            ps.setString(3, tel);
+            ps.setString(4, emp);
+
+            int n = ps.executeUpdate();
+            if (n > 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Proveedor insertado");
+            }
+            Cargar("");
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al insertar; " + error);
         }
-        catch(Exception error)
-        {
-             JOptionPane.showMessageDialog(this, 
-                     "Error al insertar; " + error);
-        }
-         this.txtIDProveedor.setText(" ");
-          this.txtNombreProveedor.setText(" ");
-          this.txtTelefono.setText(" ");
-          this.txtNombreEmpresa.setText(" ");
+        this.txtIDProveedor.setText(" ");
+        this.txtNombreProveedor.setText(" ");
+        this.txtTelefono.setText(" ");
+        this.txtNombreEmpresa.setText(" ");
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void tblProveedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProveedoresMouseClicked
         // TODO add your handling code here:
         int filaSele = tblProveedores.getSelectedRow();
-        
+
         txtIDProveedor.setText(
-                tblProveedores.getValueAt  (filaSele, 0).toString());
-         txtIDProveedor.setEnabled(false);
+                tblProveedores.getValueAt(filaSele, 0).toString());
+        txtIDProveedor.setEnabled(false);
         txtNombreProveedor.setText(
-                tblProveedores.getValueAt  (filaSele, 1).toString());
+                tblProveedores.getValueAt(filaSele, 1).toString());
         txtTelefono.setText(
-                tblProveedores.getValueAt  (filaSele, 2).toString());
+                tblProveedores.getValueAt(filaSele, 2).toString());
         txtNombreEmpresa.setText(
-                tblProveedores.getValueAt  (filaSele, 3).toString());
-        
+                tblProveedores.getValueAt(filaSele, 3).toString());
+
         filas = filaSele;
-        
+
     }//GEN-LAST:event_tblProveedoresMouseClicked
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
 
-           try
-        {
-        String sql  = "update Proveedores set  "
-                +" NombreProveedor = ' " + txtNombreProveedor.getText()
-                + " ', Telefono = ' " + txtTelefono.getText()
-                + " ', NombreEmpresa = ' " + txtNombreEmpresa.getText()
-                + " ' where IDProveedor= ' " + txtIDProveedor.getText()
-                 + " ' ";
-        PreparedStatement ps =
-                        cn.prepareStatement(sql);
-        ps.executeUpdate();
-        Cargar(" ");
-        JOptionPane.showMessageDialog(this, 
-                      "Datos actualizados");
-     }
-    catch (Exception error)
-    {
-       JOptionPane.showMessageDialog(this, 
-                      "Error " + error.getMessage());
-    }
-              this.txtIDProveedor.setText(" ");
-          this.txtNombreProveedor.setText(" ");
+        try {
+            String sql = "update Proveedores set  "
+                    + " NombreProveedor = ' " + txtNombreProveedor.getText()
+                    + " ', Telefono = ' " + txtTelefono.getText()
+                    + " ', NombreEmpresa = ' " + txtNombreEmpresa.getText()
+                    + " ' where IDProveedor= ' " + txtIDProveedor.getText()
+                    + " ' ";
+            PreparedStatement ps
+                    = cn.prepareStatement(sql);
+            ps.executeUpdate();
+            Cargar(" ");
+            JOptionPane.showMessageDialog(this,
+                    "Datos actualizados");
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(this,
+                    "Error " + error.getMessage());
+        }
+        this.txtIDProveedor.setText(" ");
+        this.txtNombreProveedor.setText(" ");
         this.txtTelefono.setText(" ");
-          this.txtNombreEmpresa.setText(" ");
+        this.txtNombreEmpresa.setText(" ");
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
-        
-          this.txtIDProveedor.setText(" ");
-          this.txtNombreProveedor.setText(" ");
-          this.txtNombreEmpresa.setText(" ");
-          this.txtTelefono.setText(" ");
-         txtIDProveedor.grabFocus();
+
+        this.txtIDProveedor.setText(" ");
+        this.txtNombreProveedor.setText(" ");
+        this.txtNombreEmpresa.setText(" ");
+        this.txtTelefono.setText(" ");
+        txtIDProveedor.grabFocus();
         txtIDProveedor.setEnabled(true);
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-       String SQL;
-       
-       SQL = "Delete from Proveedores where IDProveedor = '"+txtIDProveedor.getText()+"' ";
-       
+        String SQL;
+
+        SQL = "Delete from Proveedores where IDProveedor = '" + txtIDProveedor.getText() + "' ";
+
         try {
-              PreparedStatement ps = cn.prepareStatement(SQL);
-              int comp = 1  ;
-              comp = JOptionPane.showConfirmDialog(this, "Desea eliminar este registro");
-              System.out.println(comp);
-              if (comp == 0)
-              {
-                ps.execute();    
-              }
-    
+            PreparedStatement ps = cn.prepareStatement(SQL);
+            int comp = 1;
+            comp = JOptionPane.showConfirmDialog(this, "Desea eliminar este registro");
+            System.out.println(comp);
+            if (comp == 0) {
+                ps.execute();
+            }
+
         } catch (Exception e) {
         }
-         Cargar("");
+        Cargar("");
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void txtNombreEmpresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreEmpresaActionPerformed
@@ -414,16 +403,14 @@ void Cargar (String Valor)
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
         String palabraBuscar;
-        palabraBuscar = JOptionPane.showInputDialog(null,"INGRESE LO QUE DESEA BUSCAR");
-        if(palabraBuscar == null || palabraBuscar == " ")
-        {
-        Cargar("");    
-        }else
-        {
+        palabraBuscar = JOptionPane.showInputDialog(null, "INGRESE LO QUE DESEA BUSCAR");
+        if (palabraBuscar == null || palabraBuscar == " ") {
+            Cargar("");
+        } else {
             Cargar(palabraBuscar);
         }
-        
-         
+
+
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void txtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoActionPerformed
