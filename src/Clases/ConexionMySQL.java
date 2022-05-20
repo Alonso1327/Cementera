@@ -7,6 +7,11 @@ public class ConexionMySQL {
     
     Connection conect = null;
     
+    //static String scontra = JOptionPane.showInputDialog(null, "Ingreasa la contraseña");
+    //int a = 0;
+    
+    
+    
     public Connection ConexionMySQL()
     {
         try 
