@@ -6,6 +6,11 @@ import java.sql.*;
 import java.util.logging.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 public class frmProveedores extends javax.swing.JFrame {
 
@@ -85,6 +90,7 @@ public class frmProveedores extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblProveedores = new javax.swing.JTable();
+        btnReporte = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -212,6 +218,14 @@ public class frmProveedores extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tblProveedores);
 
+        btnReporte.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnReporte.setText("VER REPORTE");
+        btnReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -236,6 +250,10 @@ public class frmProveedores extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(281, 281, 281)
+                .addComponent(btnReporte)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -260,7 +278,9 @@ public class frmProveedores extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(387, 387, 387))
+                .addGap(27, 27, 27)
+                .addComponent(btnReporte)
+                .addGap(337, 337, 337))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -275,8 +295,8 @@ public class frmProveedores extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 73, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 511, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("CONTROL DE PROVEEDOR");
@@ -417,6 +437,27 @@ public class frmProveedores extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTelefonoActionPerformed
 
+    private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
+        // TODO add your handling code here:
+                try {
+            
+            System.out.println("ENTRADA A BASE DE DATOS" );
+            
+            String Ruta = "C:\\Users\\acer\\OneDrive\\Documentos\\4to.Semestre\\Admin. y Org. de Datos\\Cementera\\src\\Reporte_Proveedores.jasper";
+            JasperReport reporte = null;
+            reporte = (JasperReport) JRLoader.loadObjectFromFile(Ruta);
+            JasperPrint imprimir = JasperFillManager.fillReport(reporte, null, cnn.ConexionMySQL());
+            JasperViewer visor = new JasperViewer(imprimir, false);
+            visor.setTitle(" Mi Reporte");
+            visor.setVisible(true);
+            
+             System.out.println("REPORTE CREADO" );
+
+        } catch (Exception error) {
+                    System.out.println("Error al mostrar el reporte" + error);
+        }
+    }//GEN-LAST:event_btnReporteActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -461,6 +502,7 @@ public class frmProveedores extends javax.swing.JFrame {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnNuevo;
+    private javax.swing.JButton btnReporte;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
