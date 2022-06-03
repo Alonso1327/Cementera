@@ -22,7 +22,7 @@ FROM
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="48" splitType="Stretch">
+		<band height="149" splitType="Stretch">
 			<staticText>
 				<reportElement x="230" y="24" width="100" height="20"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
@@ -30,6 +30,10 @@ FROM
 				</textElement>
 				<text><![CDATA[CLIENTES]]></text>
 			</staticText>
+			<image>
+				<reportElement x="230" y="57" width="76" height="74"/>
+				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\hp\\Downloads\\user_clients_14956.jpg"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
