@@ -29,7 +29,7 @@ FROM
 		<band height="51" splitType="Stretch">
 			<staticText>
 				<reportElement x="125" y="13" width="291" height="20"/>
-				<textElement textAlignment="Left">
+				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[REPORTE: PRODUCTOS]]></text>

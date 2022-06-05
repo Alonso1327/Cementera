@@ -312,7 +312,7 @@ public class jfProductos extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblProductos);
 
-        btnReporte.setText("Reportes");
+        btnReporte.setText("Reporte");
         btnReporte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnReporteActionPerformed(evt);
@@ -507,7 +507,7 @@ public class jfProductos extends javax.swing.JFrame {
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
         // TODO add your handling code here:
         try{
-        String Ruta = "Reportes\\producto.jasper";
+        String Ruta = "C:\\Users\\BRISEIDA\\OneDrive\\Documentos\\NetBeansProjects\\Cementera\\src\\Reportes\\producto.jasper";
                  JasperReport reporte = null ; 
                   reporte=(JasperReport) JRLoader.loadObjectFromFile(Ruta);
             
