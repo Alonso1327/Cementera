@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
+import javax.swing.JRootPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -15,19 +16,23 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
-public class Ventas extends javax.swing.JFrame {
+public  class Ventas extends javax.swing.JFrame {
 
     int obtenerFecha = 1;
     int obtenerHora = 2;
     int contador = 0;
+    int ultimofolio = 0;
+    
+    public static String getIdClientes = "";
     boolean decimal = false;
-    ConexionMySQL cnn = new ConexionMySQL(); // Se crea un objeto de tipo coneccion para la coneccion de la base de datos
+    int decimalPos = 0;
+    ConexionMySQL cnn = new ConexionMySQL(); 
     Connection cn = cnn.ConexionMySQL();
 
-    String fol, idClin, fecha, hor, total;
+    String fol, idClin = "", fecha, hor, total="";
 
-    DefaultTableModel modelo;// Se crea un modelo para la tabla que mostrara los datos
-    int Filas;// se declara una variable entera llamada fila
+    DefaultTableModel modelo;
+    int Filas;
 
     public Ventas() {
         initComponents();
@@ -41,11 +46,9 @@ public class Ventas extends javax.swing.JFrame {
 
     }
 
-    // El metodo Carga mostrara los datos en la tabla
     void Cargar(String valor) {
         String Consulta = "select * from Ventas " + "where concat(NoFolio, IDCliente,Fecha,Hora,Total)"
                 + " like '%" + valor + "%'";
-
         String[] Titulos = {"Folio", "Clientes", "Fecha", "Hora", "Total"};
         String[] Registros = new String[9];
         modelo = new DefaultTableModel(null, Titulos) {
@@ -54,24 +57,19 @@ public class Ventas extends javax.swing.JFrame {
                 return false;
             }
         };
-
         try {
-
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(Consulta);
-
             while (rs.next()) {
                 Registros[0] = rs.getString("NoFolio");
                 Registros[1] = rs.getString("IdCliente");
                 Registros[2] = rs.getString("Fecha");
                 Registros[3] = rs.getString("Hora");
                 Registros[4] = rs.getString("Total");
-
+                ultimofolio = rs.getInt("NoFolio");
                 modelo.addRow(Registros);
-
             }
             tblVenta.setModel(modelo);
-
         } catch (Exception error) {
             JOptionPane.showMessageDialog(null, "Error al cargar la tabla de Clientes: " + error.getMessage());
         }
@@ -79,13 +77,11 @@ public class Ventas extends javax.swing.JFrame {
 
     public String obtenerFechaHoraActual(int valorAObtener) {
         String obtenerDato;
-
         if (valorAObtener == obtenerFecha) {
             obtenerDato = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
         } else {
             obtenerDato = new SimpleDateFormat("hh:ss").format(Calendar.getInstance().getTime());
         }
-
         return obtenerDato;
     }
 
@@ -95,7 +91,6 @@ public class Ventas extends javax.swing.JFrame {
         fecha = this.ftxtFecha.getText();
         hor = this.txtHora.getText();
         total = this.txtTotal.getText();
-
     }
 
     /**
@@ -124,6 +119,7 @@ public class Ventas extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         ftxtFecha = new javax.swing.JTextField();
+        btnBuscarCliente = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblVenta = new javax.swing.JTable();
         txtBuscar = new javax.swing.JTextField();
@@ -175,6 +171,11 @@ public class Ventas extends javax.swing.JFrame {
         });
 
         txtTotal.setPreferredSize(null);
+        txtTotal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTotalActionPerformed(evt);
+            }
+        });
         txtTotal.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtTotalKeyTyped(evt);
@@ -226,7 +227,7 @@ public class Ventas extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addGap(72, 72, 72)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -259,6 +260,13 @@ public class Ventas extends javax.swing.JFrame {
             }
         });
 
+        btnBuscarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/buscar.png"))); // NOI18N
+        btnBuscarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarClienteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -275,10 +283,12 @@ public class Ventas extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
                     .addComponent(txtHora, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
-                    .addComponent(txtIDCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtFolio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ftxtFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(35, 35, 35)
+                    .addComponent(ftxtFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtIDCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(1, 1, 1)
+                .addComponent(btnBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(51, Short.MAX_VALUE))
         );
@@ -292,11 +302,12 @@ public class Ventas extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtFolio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(37, 37, 37)
+                        .addGap(36, 36, 36)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtIDCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(35, 35, 35)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBuscarCliente))
+                        .addGap(33, 33, 33)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(ftxtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -333,10 +344,15 @@ public class Ventas extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblVenta);
 
         txtBuscar.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 txtBuscarInputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+        });
+        txtBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscarActionPerformed(evt);
             }
         });
         txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -395,49 +411,34 @@ public class Ventas extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        getDatos();
-        String SQL;
-
-        SQL = "insert into Ventas (NoFolio,IDCliente,Fecha,Hora, Total)"
-                + " values(?,?,?,?,?)";
-
-        try {
-            PreparedStatement ps = cn.prepareStatement(SQL);
-            ps.setString(1, fol);
-            ps.setString(2, idClin);
-            ps.setString(3, fecha);
-            ps.setString(4, hor);
-            ps.setString(5, total);
-
-            int n = ps.executeUpdate();
-            if (n > 0) {
-                JOptionPane.showMessageDialog(this, "Venta Insertado");
-                DesactivarBotones(false);
-            }
-            Cargar("");
-            vaciarCampos();
-            txtFieldsActualizar(false);
-        } catch (Exception error) {
-            JOptionPane.showMessageDialog(this, "Error al insertar: " + error.getMessage() + "\n" + error);
-        }
+           getDatos();
+           //System.out.println(idc);
+           if(idClin.length() < 0 || total.length() < 0){
+               if(InsertarDatos()> 0){
+                    DesactivarBotones(false);
+                    Cargar("");
+                    vaciarCampos();
+                    txtFieldsActualizar(false);
+                }
+           }else{
+                JOptionPane.showMessageDialog(this, "Faltan Datos por ingresar");
+           }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         // TODO add your handling code here:
-        try {
-            String sql = "Update Ventas set IDCliente = '" + txtIDCliente.getText() + "',"
-                    + "Fecha = '" + ftxtFecha.getText() + "'," + " Hora = '" + txtHora.getText() + "', "
-                    + "Total = '" + txtTotal.getText() + "' where NoFolio = '" + txtFolio.getText() + "'";
-            PreparedStatement ps = cn.prepareStatement(sql);
-            ps.executeUpdate();
-            Cargar("");
-            JOptionPane.showMessageDialog(this, "DATOS ACTUALIZADOS");
-            txtFieldsActualizar(false);
-            vaciarCampos();
-            DesactivarBotones(false);
-        } catch (Exception error) {
-            JOptionPane.showMessageDialog(this, "Error: " + error.getMessage());
-        }
+        getDatos();
+         if(idClin.length() < 0 || total.length() < 0){
+            if(Actualizar() > 0)
+            {
+                JOptionPane.showMessageDialog(this, "DATOS ACTUALIZADOS");
+                txtFieldsActualizar(false);
+                vaciarCampos();
+                DesactivarBotones(false);
+            }
+         }else{
+             JOptionPane.showMessageDialog(this, "Faltan Datos por ingresar");
+         }
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void tblVentaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVentaMouseClicked
@@ -457,6 +458,11 @@ public class Ventas extends javax.swing.JFrame {
         txtFolio.setEnabled(false);
     }//GEN-LAST:event_tblVentaMouseClicked
 
+    public void ObteberIdCliente(String valoridCliente)
+    {
+        txtIDCliente.setText(valoridCliente);
+    }
+    
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
         String SQL;
@@ -482,15 +488,20 @@ public class Ventas extends javax.swing.JFrame {
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
-
         vaciarCampos();
+        
         ftxtFecha.setText(obtenerFechaHoraActual(obtenerFecha));
         txtHora.setText(obtenerFechaHoraActual(obtenerHora));
-
+        int acFolio = ultimofolio + 1;
+        txtFolio.setText(Integer.toString(acFolio));
+        
         btnCancelar.setEnabled(true);
         btnGuardar.setEnabled(true);
+        btnBuscarCliente.setEnabled(true);
         btnNuevo.setEnabled(false);
+        
         txtFieldsActualizar(true);
+        
 
     }//GEN-LAST:event_btnNuevoActionPerformed
 
@@ -542,30 +553,26 @@ public class Ventas extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIDClienteKeyTyped
 
     private void txtTotalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTotalKeyTyped
-        // TODO add your handling code here:
+
         int key = evt.getKeyChar();
-        //System.out.println("tecla precionada: "+ key);
-
-        boolean numeros = key >= 48 && key <= 57;
-        if (key == 46 && decimal == false) {
+        boolean numeros = (key >= 48 && key <= 57);
+     
+        if(key == 46 && decimal == false){
             decimal = true;
-            contador += 1;
-        }
-        if (decimal && numeros) {
-            contador += 1;
-        }
-
-        if (key == 8) {
-            contador -= 1;
-            if (contador <= 0) {
-                contador = 0;
+            decimalPos = txtTotal.getText().length();
+        }else{
+            if(key == 8 && txtTotal.getText().length() == decimalPos){
                 decimal = false;
+                decimalPos = 0;
             }
+            if (!numeros && decimal == true){
+                evt.consume();
+            }   
         }
+        
+        
 
-        if (!numeros) {
-            evt.consume();
-        }
+        
     }//GEN-LAST:event_txtTotalKeyTyped
 
     private void ftxtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftxtFechaActionPerformed
@@ -593,6 +600,21 @@ public class Ventas extends javax.swing.JFrame {
            
        }
     }//GEN-LAST:event_btnReporteActionPerformed
+
+    private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
+        // TODO add your handling code here:
+        jfBuscarCliente buscarCliente = new jfBuscarCliente();
+        buscarCliente.setVisible(true);
+        
+    }//GEN-LAST:event_btnBuscarClienteActionPerformed
+
+    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscarActionPerformed
+
+    private void txtTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTotalActionPerformed
 
     /**
      * @param args the command line arguments
@@ -631,6 +653,7 @@ public class Ventas extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
@@ -650,7 +673,7 @@ public class Ventas extends javax.swing.JFrame {
     private javax.swing.JTextField txtBuscar;
     private javax.swing.JTextField txtFolio;
     private javax.swing.JTextField txtHora;
-    private javax.swing.JTextField txtIDCliente;
+    public static javax.swing.JTextField txtIDCliente;
     private javax.swing.JTextField txtTotal;
     // End of variables declaration//GEN-END:variables
 
@@ -663,7 +686,7 @@ public class Ventas extends javax.swing.JFrame {
     }
 
     private void txtFieldsActualizar(boolean realizar) {
-        txtFolio.setEnabled(realizar);
+        txtFolio.setEnabled(false);
         txtIDCliente.setEnabled(realizar);
         txtTotal.setEnabled(realizar);
         ftxtFecha.setEnabled(false);
@@ -676,5 +699,55 @@ public class Ventas extends javax.swing.JFrame {
         btnActualizar.setEnabled(activacion);
         btnEliminar.setEnabled(activacion);
         btnCancelar.setEnabled(activacion);
+        btnBuscarCliente.setEnabled(activacion);
+    }
+    
+    private int InsertarDatos(){
+        getDatos();
+        int n = 0;
+        String SQL;
+        SQL = "insert into Ventas (NoFolio,IDCliente,Fecha,Hora, Total)"
+                + " values(?,?,?,?,?)";
+        try {
+            PreparedStatement ps = cn.prepareStatement(SQL);
+            ps.setString(1, fol);
+            ps.setString(2, idClin);
+            ps.setString(3, fecha);
+            ps.setString(4, hor);
+            ps.setString(5, total);
+            
+            
+            n = ps.executeUpdate();
+            if (n > 0) {
+                JOptionPane.showMessageDialog(this, "Venta Insertado");
+                
+            }
+            
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(this, "Error al insertar: " +
+                    error.getMessage() + "\n" + error);
+        }
+        return n;
+    }
+    
+    private int Actualizar()
+    {
+        int n = 0;
+        try {
+            String sql = "Update Ventas set IDCliente = '" 
+                    + txtIDCliente.getText() + "',"
+                    + "Fecha = '" + ftxtFecha.getText() + 
+                    "'," + " Hora = '" + txtHora.getText() + "', "
+                    + "Total = '" + txtTotal.getText() + "' where NoFolio = '" +
+                    txtFolio.getText() + "'";
+            PreparedStatement ps = cn.prepareStatement(sql);
+            n = ps.executeUpdate();
+            Cargar("");
+            
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(this, "Error: " + error.getMessage());
+        }
+        
+        return n;
     }
 }

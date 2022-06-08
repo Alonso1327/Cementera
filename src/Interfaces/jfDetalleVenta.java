@@ -26,6 +26,7 @@ public class jfDetalleVenta extends javax.swing.JFrame {
     
     DefaultTableModel modelo;
     int Filas;
+    public String getnoFolio;
     
     public jfDetalleVenta() {
         initComponents();
@@ -68,6 +69,7 @@ public class jfDetalleVenta extends javax.swing.JFrame {
         txtCantidad.setText("");
         txtSubtotal.setText("");
     }
+    
     
     void Cargar (String Valor)
     {
@@ -450,6 +452,7 @@ public class jfDetalleVenta extends javax.swing.JFrame {
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
+        
         Limpiar();
         Desbloquear();
         txtIDDetalleVenta.grabFocus();
