@@ -1,9 +1,7 @@
 package Interfaces;
 
 import Clases.ConexionMySQL;
-import java.awt.event.KeyEvent;
 import java.sql.*;
-import java.util.logging.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -19,14 +17,41 @@ public class frmProveedores extends javax.swing.JFrame {
 
     DefaultTableModel modelo;
     int filas;
+    int ultimoId;
 
     public frmProveedores() {
         initComponents();
         Cargar("");
+        Actualizarinterfaz(false);
+        VaciarCampos();
+        ActualizarBotone(false);
         this.setResizable(false);
         this.setTitle("PROVEEDORES");
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         tblProveedores.getTableHeader().setReorderingAllowed(false);
+    }
+
+    public void Actualizarinterfaz(boolean valor) {
+        txtIDProveedor.setEnabled(false);
+        txtNombreEmpresa.setEnabled(valor);
+        txtNombreProveedor.setEnabled(valor);
+        txtTelefono.setEnabled(valor);
+        btnCancelar.setEnabled(valor);
+    }
+    
+    public void VaciarCampos(){
+        txtIDProveedor.setText("");
+        txtNombreEmpresa.setText("");
+        txtNombreProveedor.setText("");
+        txtTelefono.setText("");
+    }
+    
+    public void ActualizarBotone(boolean estado)
+    {
+            btnActualizar.setEnabled(estado);
+            btnEliminar.setEnabled(estado);
+            btnNuevo.setEnabled(!estado);
+            btnGuardar.setEnabled(estado);
     }
 
     void Cargar(String Valor) {
@@ -39,8 +64,12 @@ public class frmProveedores extends javax.swing.JFrame {
         String[] Titulo = {"ID Proveedor", "Nombre Proveedor",
             "Telefono", "NombreEmpresa"};
         String[] Registros = new String[9];
-        modelo = new DefaultTableModel(null, Titulo);
-
+        modelo = new DefaultTableModel(null, Titulo) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         try {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(Consulta);
@@ -50,6 +79,7 @@ public class frmProveedores extends javax.swing.JFrame {
                 Registros[1] = rs.getString("NombreProveedor");
                 Registros[2] = rs.getString("Telefono");
                 Registros[3] = rs.getString("NombreEmpresa");
+                ultimoId = rs.getInt("IDProveedor");
                 modelo.addRow(Registros);
             }
             tblProveedores.setModel(modelo);
@@ -63,7 +93,6 @@ public class frmProveedores extends javax.swing.JFrame {
     /**
      * Creates new form frmClientes
      */
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -88,6 +117,7 @@ public class frmProveedores extends javax.swing.JFrame {
         btnActualizar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblProveedores = new javax.swing.JTable();
         btnReporte = new javax.swing.JButton();
@@ -109,15 +139,31 @@ public class frmProveedores extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("TELEFONO");
 
+        txtNombreProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreProveedorKeyTyped(evt);
+            }
+        });
+
         txtNombreEmpresa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNombreEmpresaActionPerformed(evt);
+            }
+        });
+        txtNombreEmpresa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreEmpresaKeyTyped(evt);
             }
         });
 
         txtTelefono.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTelefonoActionPerformed(evt);
+            }
+        });
+        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoKeyTyped(evt);
             }
         });
 
@@ -168,6 +214,13 @@ public class frmProveedores extends javax.swing.JFrame {
             }
         });
 
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -183,7 +236,9 @@ public class frmProveedores extends javax.swing.JFrame {
                 .addComponent(btnActualizar)
                 .addGap(18, 18, 18)
                 .addComponent(btnEliminar)
-                .addGap(74, 74, 74))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCancelar)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,7 +249,8 @@ public class frmProveedores extends javax.swing.JFrame {
                     .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnNuevo)
-                    .addComponent(btnBuscar))
+                    .addComponent(btnBuscar)
+                    .addComponent(btnCancelar))
                 .addContainerGap())
         );
 
@@ -241,9 +297,9 @@ public class frmProveedores extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNombreEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addGap(55, 55, 55)
+                .addGap(54, 54, 54)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(494, 494, 494))
+                .addGap(535, 535, 535))
         );
 
         tblProveedores.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -278,7 +334,7 @@ public class frmProveedores extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(29, Short.MAX_VALUE)
+                .addContainerGap(14, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane2)
@@ -336,36 +392,40 @@ public class frmProveedores extends javax.swing.JFrame {
                         "Proveedor insertado");
             }
             Cargar("");
+            ActualizarBotone(false);
+            Actualizarinterfaz(false);
+            VaciarCampos();
         } catch (Exception error) {
             JOptionPane.showMessageDialog(this,
                     "Error al insertar; " + error);
         }
-        this.txtIDProveedor.setText(" ");
-        this.txtNombreProveedor.setText(" ");
-        this.txtTelefono.setText(" ");
-        this.txtNombreEmpresa.setText(" ");
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void tblProveedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProveedoresMouseClicked
         // TODO add your handling code here:
         int filaSele = tblProveedores.getSelectedRow();
-
+        Actualizarinterfaz(true);
+        ActualizarBotone(true);
         txtIDProveedor.setText(
                 tblProveedores.getValueAt(filaSele, 0).toString());
         txtIDProveedor.setEnabled(false);
+        btnGuardar.setEnabled(false);
         txtNombreProveedor.setText(
                 tblProveedores.getValueAt(filaSele, 1).toString());
         txtTelefono.setText(
                 tblProveedores.getValueAt(filaSele, 2).toString());
         txtNombreEmpresa.setText(
                 tblProveedores.getValueAt(filaSele, 3).toString());
+        
+        
+        
 
         filas = filaSele;
 
     }//GEN-LAST:event_tblProveedoresMouseClicked
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-
+        
         try {
             String sql = "update Proveedores set  "
                     + " NombreProveedor = ' " + txtNombreProveedor.getText()
@@ -379,6 +439,9 @@ public class frmProveedores extends javax.swing.JFrame {
             Cargar(" ");
             JOptionPane.showMessageDialog(this,
                     "Datos actualizados");
+            ActualizarBotone(false);
+            Actualizarinterfaz(false);
+            VaciarCampos();
         } catch (Exception error) {
             JOptionPane.showMessageDialog(this,
                     "Error " + error.getMessage());
@@ -390,14 +453,14 @@ public class frmProveedores extends javax.swing.JFrame {
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        // TODO add your handling code here:
-
-        this.txtIDProveedor.setText(" ");
-        this.txtNombreProveedor.setText(" ");
-        this.txtNombreEmpresa.setText(" ");
-        this.txtTelefono.setText(" ");
-        txtIDProveedor.grabFocus();
-        txtIDProveedor.setEnabled(true);
+        
+        VaciarCampos();
+        Actualizarinterfaz(true);
+        btnGuardar.setEnabled(true);
+        btnNuevo.setEnabled(false);
+        btnCancelar.setEnabled(true);
+        txtIDProveedor.setText(Integer.toString(ultimoId+1));
+        txtNombreProveedor.grabFocus();
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -414,6 +477,9 @@ public class frmProveedores extends javax.swing.JFrame {
             if (comp == 0) {
                 ps.execute();
             }
+            ActualizarBotone(false);
+            Actualizarinterfaz(false);
+            VaciarCampos();
 
         } catch (Exception e) {
         }
@@ -443,25 +509,75 @@ public class frmProveedores extends javax.swing.JFrame {
 
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
         // TODO add your handling code here:
-        try{
-        String Ruta = "C:\\Users\\BRISEIDA\\OneDrive\\Documentos\\NetBeansProjects\\Cementera\\src\\Reportes\\Reporte_Proveedores.jasper";
-                 JasperReport reporte = null ; 
-                  reporte=(JasperReport) JRLoader.loadObjectFromFile(Ruta);
-            
-                  JasperPrint imprimir = JasperFillManager.
-                          fillReport(reporte,null,cnn.ConexionMySQL());
-                  
-                  
-                  JasperViewer visor = new JasperViewer (imprimir, false);
-                   visor.setTitle("Mi reporte");
-                   visor.setVisible(true);
-       }
-       catch(Exception e)
-       {
-           System.out.println("Error: "+ e);
-           
-       }
+        try {
+            String Ruta = "C:\\Users\\BRISEIDA\\OneDrive\\Documentos\\NetBeansProjects\\Cementera\\src\\Reportes\\Reporte_Proveedores.jasper";
+            JasperReport reporte = null;
+            reporte = (JasperReport) JRLoader.loadObjectFromFile(Ruta);
+
+            JasperPrint imprimir = JasperFillManager.
+                    fillReport(reporte, null, cnn.ConexionMySQL());
+
+            JasperViewer visor = new JasperViewer(imprimir, false);
+            visor.setTitle("Mi reporte");
+            visor.setVisible(true);
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+
+        }
     }//GEN-LAST:event_btnReporteActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        ActualizarBotone(false);
+        Actualizarinterfaz(false);
+        VaciarCampos();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtNombreProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreProveedorKeyTyped
+        // TODO add your handling code here:
+        int key = evt.getKeyChar();
+        
+        boolean letra = (key >= 64 && key <= 90 )||(key >= 97 && key <= 122)||(key == 32);
+        String chec = txtNombreProveedor.getText();
+        if(key == 32 && chec.length() <= 0)
+        {
+            letra = false;
+           
+        }
+        
+        if(!letra){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombreProveedorKeyTyped
+
+    private void txtNombreEmpresaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreEmpresaKeyTyped
+        // TODO add your handling code here:
+        int key = evt.getKeyChar();
+        
+        boolean letra = (key >= 64 && key <= 90 )||(key >= 97 && key <= 122)||(key == 32);
+        String chec = txtNombreEmpresa.getText();
+        
+        if(key == 32 && chec.length() <= 0)
+        {
+            letra = false;
+           
+        }
+        
+        if(!letra){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombreEmpresaKeyTyped
+
+    private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
+        // TODO add your handling code here:
+        int key = evt.getKeyChar();
+
+        boolean numeros = key >= 48 && key <= 57;
+
+        if (!numeros) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtTelefonoKeyTyped
 
     /**
      * @param args the command line arguments
@@ -504,6 +620,7 @@ public class frmProveedores extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnNuevo;

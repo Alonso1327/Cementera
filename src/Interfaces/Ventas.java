@@ -1,6 +1,7 @@
 package Interfaces;
 
 import Clases.ConexionMySQL;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -379,16 +380,16 @@ public  class Ventas extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel6)))
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel6)
                         .addGap(53, 53, 53))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnReporte)
-                        .addGap(238, 238, 238))))
+                        .addGap(238, 238, 238))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(92, 92, 92))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -398,9 +399,9 @@ public  class Ventas extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(16, 16, 16)
                 .addComponent(btnReporte)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -413,7 +414,7 @@ public  class Ventas extends javax.swing.JFrame {
         // TODO add your handling code here:
            getDatos();
            //System.out.println(idc);
-           if(idClin.length() < 0 || total.length() < 0){
+           if(idClin.length() > 0 && total.length() > 0){
                if(InsertarDatos()> 0){
                     DesactivarBotones(false);
                     Cargar("");
@@ -428,7 +429,7 @@ public  class Ventas extends javax.swing.JFrame {
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         // TODO add your handling code here:
         getDatos();
-         if(idClin.length() < 0 || total.length() < 0){
+         if(idClin.length() > 0 && total.length() > 0){
             if(Actualizar() > 0)
             {
                 JOptionPane.showMessageDialog(this, "DATOS ACTUALIZADOS");
@@ -565,7 +566,7 @@ public  class Ventas extends javax.swing.JFrame {
                 decimal = false;
                 decimalPos = 0;
             }
-            if (!numeros && decimal == true){
+            if (!numeros){
                 evt.consume();
             }   
         }
@@ -582,17 +583,17 @@ public  class Ventas extends javax.swing.JFrame {
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
         // TODO add your handling code here:
         try{
-        String Ruta = "C:\\Users\\BRISEIDA\\OneDrive\\Documentos\\NetBeansProjects\\Cementera\\src\\Reportes\\rptVentas.jasper";
-                 JasperReport reporte = null ; 
-                  reporte=(JasperReport) JRLoader.loadObjectFromFile(Ruta);
+            String Ruta = "/Reportes/rptVentas.jasper";
+            InputStream archivo = getClass().getResourceAsStream(Ruta);
             
-                  JasperPrint imprimir = JasperFillManager.
-                          fillReport(reporte,null,cnn.ConexionMySQL());
-                  
-                  
-                  JasperViewer visor = new JasperViewer (imprimir, false);
-                   visor.setTitle("Mi reporte");
-                   visor.setVisible(true);
+            JasperReport reporte = null ; 
+            reporte=(JasperReport) JRLoader.loadObject(archivo);
+            
+            JasperPrint imprimir = JasperFillManager.fillReport(reporte,null,cnn.ConexionMySQL());
+
+            JasperViewer visor = new JasperViewer (imprimir, false);
+            visor.setTitle("Reporte Ventas");
+            visor.setVisible(true);
        }
        catch(Exception e)
        {
