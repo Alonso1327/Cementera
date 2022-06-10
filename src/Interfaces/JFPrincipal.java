@@ -62,11 +62,11 @@ public class JFPrincipal extends javax.swing.JFrame {
 
         jPanel1.setLayout(null);
 
-        jLabel2.setFont(new java.awt.Font("Berlin Sans FB", 0, 24)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("MATERIALES MARICARMEN");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(100, 30, 360, 40);
+        jLabel2.setBounds(80, 30, 410, 40);
 
         btnDetalleVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Detalle_Venta.png"))); // NOI18N
         btnDetalleVenta.setText("Detalle Venta");
