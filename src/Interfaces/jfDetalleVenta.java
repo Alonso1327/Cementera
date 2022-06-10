@@ -6,13 +6,11 @@
 package Interfaces;
 
 import Clases.ConexionMySQL;
-import java.awt.event.KeyEvent;
 import java.sql.*;
-import java.util.Set;
-import java.util.logging.*;
 import javax.swing.JOptionPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.ComboBoxModel;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -26,16 +24,66 @@ public class jfDetalleVenta extends javax.swing.JFrame {
     
     DefaultTableModel modelo;
     int Filas;
-    public String getnoFolio;
+    boolean decimal = false;
+    int decimalPos=0;
+    jfBuscarProducto bProducto = new jfBuscarProducto();
+    private int ultimoId;
     
     public jfDetalleVenta() {
         initComponents();
-        
+       txtCantidad.getDocument().addDocumentListener(new DocumentListener(){
+            @Override
+            public void insertUpdate(DocumentEvent de) {
+                obtenerSubtotal(); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent de) {
+                obtenerSubtotal(); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent de) {
+                obtenerSubtotal(); //To change body of generated methods, choose Tools | Templates.
+            }
+       });
+       
+       txtPrecio.getDocument().addDocumentListener(new DocumentListener(){
+            @Override
+            public void insertUpdate(DocumentEvent de) {
+                obtenerSubtotal(); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent de) {
+                obtenerSubtotal(); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent de) {
+                obtenerSubtotal(); //To change body of generated methods, choose Tools | Templates.
+            }
+       });
+       
         Bloquear();
         Cargar("");
         this.setResizable(false);
         this.setTitle("DetalleVenta");
-        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    void obtenerSubtotal(){
+        float precioU,cantidad,subtotal;
+        
+        if(txtPrecio.getText().length() > 0 && txtCantidad.getText().length() > 0){
+        precioU = Float.parseFloat(txtPrecio.getText());
+        cantidad = Float.parseFloat(txtCantidad.getText());
+        subtotal = precioU * cantidad;
+        txtSubtotal.setText(Float.toString(subtotal));
+        }else{
+            txtSubtotal.setText("0");
+        }
+            
+        
     }
     
     void Bloquear(){
@@ -47,10 +95,25 @@ public class jfDetalleVenta extends javax.swing.JFrame {
         txtCantidad.setEnabled(false);
         cbPresentacion.setEnabled(false);
         txtSubtotal.setEnabled(false);
+        btnActualizar.setEnabled(false);
+        btnBuscarProducto.setEnabled(false);
+        btnCancelar.setEnabled(false);
+        btnEliminar.setEnabled(false);
+        btnGuardar.setEnabled(false);
+        btnNuevo.setEnabled(true);
+    }
+    
+    void Desbloquerbotones(){
+        btnActualizar.setEnabled(true);
+        btnBuscarProducto.setEnabled(true);
+        btnCancelar.setEnabled(true);
+        btnEliminar.setEnabled(true);
+        btnGuardar.setEnabled(true);
+        btnNuevo.setEnabled(false);
     }
     
     void Desbloquear(){
-        txtIDDetalleVenta.setEnabled(true);
+        //txtIDDetalleVenta.setEnabled(true);
         txtFolio.setEnabled(true);
         txtIDProducto.setEnabled(true);
         txtNombreProducto.setEnabled(true);
@@ -68,6 +131,8 @@ public class jfDetalleVenta extends javax.swing.JFrame {
         txtPrecio.setText("");
         txtCantidad.setText("");
         txtSubtotal.setText("");
+        
+        
     }
     
     
@@ -96,6 +161,7 @@ public class jfDetalleVenta extends javax.swing.JFrame {
                 Registros[5] = rs.getString("Cantidad");
                 Registros[6] = rs.getString("Presentacion");
                 Registros[7] = rs.getString("Subtotal");
+                ultimoId = rs.getInt("IDDetalleVenta");
                 modelo.addRow(Registros);
                 
             }
@@ -106,6 +172,8 @@ public class jfDetalleVenta extends javax.swing.JFrame {
             + error.getMessage());
         }
     }
+     
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -139,11 +207,18 @@ public class jfDetalleVenta extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         cbPresentacion = new javax.swing.JComboBox<>();
         btnActualizar = new javax.swing.JButton();
+        btnBuscarProducto = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDetalleVenta = new javax.swing.JTable();
         btnReporte = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Detalle Venta");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "DETALLE VENTA", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial Black", 1, 18))); // NOI18N
@@ -187,6 +262,11 @@ public class jfDetalleVenta extends javax.swing.JFrame {
         txtCantidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCantidadActionPerformed(evt);
+            }
+        });
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyTyped(evt);
             }
         });
 
@@ -257,6 +337,13 @@ public class jfDetalleVenta extends javax.swing.JFrame {
             }
         });
 
+        btnBuscarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/buscar_DV.png"))); // NOI18N
+        btnBuscarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarProductoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -277,17 +364,19 @@ public class jfDetalleVenta extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtIDProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtNombreProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cbPresentacion, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(67, 67, 67)
+                            .addComponent(txtSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(txtIDProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnBuscarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(37, 37, 37)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(btnEliminar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnCancelar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnActualizar)
                             .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -295,7 +384,7 @@ public class jfDetalleVenta extends javax.swing.JFrame {
                         .addComponent(txtIDDetalleVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(67, 67, 67)
                         .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(164, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -315,10 +404,11 @@ public class jfDetalleVenta extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtFolio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
-                        .addGap(18, 18, 18)
+                        .addGap(17, 17, 17)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtIDProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
+                            .addComponent(jLabel3)
+                            .addComponent(btnBuscarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtNombreProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -383,24 +473,24 @@ public class jfDetalleVenta extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 873, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
                 .addGap(406, 406, 406)
                 .addComponent(btnReporte)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 873, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(25, 25, 25)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnReporte)
                 .addGap(103, 103, 103))
         );
@@ -423,34 +513,24 @@ public class jfDetalleVenta extends javax.swing.JFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-        int fila = tblDetalleVenta.getSelectedRow();
-        String cod="";
-        if(fila==-1){
-		JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila");
-	}else{
-		int valor =JOptionPane.showConfirmDialog(null,"¿Seguro que desea eliminar este registro?","Advertencia",
-                        JOptionPane.YES_NO_OPTION);
- 
-		if (valor==JOptionPane.YES_OPTION){
-			int filaselec = tblDetalleVenta.getSelectedRow();
-			
-			cod = tblDetalleVenta.getValueAt(fila, 0).toString();
-                }
-        }
-    
+        int valor =JOptionPane.showConfirmDialog(null,"¿Seguro que desea eliminar este registro?","Advertencia",
+                JOptionPane.YES_NO_OPTION);
         try {
-            PreparedStatement elim = cn.prepareStatement("DELETE FROM DetalleVentas WHERE IDDetalleVenta='" + cod + "'");
-            
-            int n = elim.executeUpdate();
-            if (n>0) {
-                JOptionPane.showMessageDialog(null, "Detalle de venta borrado");
-                tblDetalleVenta.setModel(new DefaultTableModel());
-                Cargar("");
-                Limpiar();
-                Bloquear();
-            }
-            else{
-                JOptionPane.showMessageDialog(null, "El detalle de venta no se borro");
+            if(valor ==0){
+                PreparedStatement elim = cn.prepareStatement("DELETE FROM DetalleVentas WHERE IDDetalleVenta='" + txtIDDetalleVenta.getText() + "'");
+
+                int n = elim.executeUpdate();
+                if (n>0) {
+                    JOptionPane.showMessageDialog(null, "Detalle de venta borrado");
+                    tblDetalleVenta.setModel(new DefaultTableModel());
+                    Cargar("");
+                    Limpiar();
+                    Bloquear();
+                    
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "El detalle de venta no se borro");
+                }
             }
             
         } catch (SQLException error) {
@@ -463,8 +543,17 @@ public class jfDetalleVenta extends javax.swing.JFrame {
         
         Limpiar();
         Desbloquear();
-        txtIDDetalleVenta.grabFocus();
-        
+        txtFolio.grabFocus();
+        txtIDDetalleVenta.setText(Integer.toString(ultimoId+1));
+        txtCantidad.setText("0");
+        txtSubtotal.setText("0");
+        txtSubtotal.setEnabled(false);
+        txtPrecio.setEnabled(false);
+        txtNombreProducto.setEnabled(false);
+        btnGuardar.setEnabled(true);
+        btnNuevo.setEnabled(false);
+        btnCancelar.setEnabled(true);
+        btnBuscarProducto.setEnabled(true);
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void cbPresentacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPresentacionActionPerformed
@@ -596,7 +685,7 @@ public class jfDetalleVenta extends javax.swing.JFrame {
       
         Filas = filaSele;
         
-        txtNombreProducto.setEnabled(true);
+        //txtNombreProducto.setEnabled(true);
         txtCantidad.setEnabled(true);
         cbPresentacion.setEnabled(true);
         txtIDDetalleVenta.setEnabled(false);
@@ -605,6 +694,8 @@ public class jfDetalleVenta extends javax.swing.JFrame {
         txtPrecio.setEnabled(false);
         txtSubtotal.setEnabled(false);
         
+        Desbloquerbotones();
+        btnGuardar.setEnabled(false);
         
     }//GEN-LAST:event_tblDetalleVentaMouseClicked
 
@@ -633,6 +724,48 @@ public class jfDetalleVenta extends javax.swing.JFrame {
            
        }
     }//GEN-LAST:event_btnReporteActionPerformed
+
+    private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
+        // TODO add your handling code here:
+        
+        bProducto.setVisible(true);
+    }//GEN-LAST:event_btnBuscarProductoActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        if(bProducto.isVisible()== true){
+           bProducto.dispose();
+        }else{
+            this.dispose();
+        }
+    }//GEN-LAST:event_formWindowClosing
+
+    private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
+        int key = evt.getKeyChar();
+        boolean numeros = (key >= 48 && key <= 57);
+        if(key == 46 && decimal == false){
+            decimal = true;
+            decimalPos = txtCantidad.getText().length();
+        }else{
+            if(key == 8 && txtCantidad.getText().length() == decimalPos){
+                decimal = false;
+                decimalPos = 0;
+            }
+            if (!numeros){
+                evt.consume();
+            }
+            /*if(txtCantidad.getText().length() == 0 && numeros){
+                 cantidad ;
+                 txtSubtotal.setText(Float.toString(precioU*cantidad)); 
+            }else if(txtCantidad.getText().length() == 0)
+            {
+              txtSubtotal.setText("0"); 
+            }else if(numeros){
+                cantidad = Float.parseFloat(txtCantidad.getText());
+                txtSubtotal.setText(Float.toString(precioU*cantidad)); 
+            }*/
+        }
+    }//GEN-LAST:event_txtCantidadKeyTyped
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -669,12 +802,13 @@ public class jfDetalleVenta extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnBuscarProducto;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnReporte;
-    private javax.swing.JComboBox<String> cbPresentacion;
+    public static javax.swing.JComboBox<String> cbPresentacion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -689,9 +823,10 @@ public class jfDetalleVenta extends javax.swing.JFrame {
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtFolio;
     private javax.swing.JTextField txtIDDetalleVenta;
-    private javax.swing.JTextField txtIDProducto;
-    private javax.swing.JTextField txtNombreProducto;
-    private javax.swing.JTextField txtPrecio;
+    public static javax.swing.JTextField txtIDProducto;
+    public static javax.swing.JTextField txtNombreProducto;
+    public static javax.swing.JTextField txtPrecio;
     private javax.swing.JTextField txtSubtotal;
     // End of variables declaration//GEN-END:variables
+    
 }

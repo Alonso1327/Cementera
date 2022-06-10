@@ -29,6 +29,7 @@ public  class Ventas extends javax.swing.JFrame {
     int decimalPos = 0;
     ConexionMySQL cnn = new ConexionMySQL(); 
     Connection cn = cnn.ConexionMySQL();
+    jfBuscarCliente buscarCliente = new jfBuscarCliente();
 
     String fol, idClin = "", fecha, hor, total="";
 
@@ -129,6 +130,11 @@ public  class Ventas extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Ventas");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "VENTAS", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial Black", 1, 18))); // NOI18N
@@ -343,10 +349,10 @@ public  class Ventas extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblVenta);
 
         txtBuscar.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 txtBuscarInputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         txtBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -602,7 +608,7 @@ public  class Ventas extends javax.swing.JFrame {
 
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
         // TODO add your handling code here:
-        jfBuscarCliente buscarCliente = new jfBuscarCliente();
+        
         buscarCliente.setVisible(true);
         
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
@@ -614,6 +620,15 @@ public  class Ventas extends javax.swing.JFrame {
     private void txtTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTotalActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        if(buscarCliente.isShowing()== true){
+            buscarCliente.dispose();
+        }else{
+            this.dispose();
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

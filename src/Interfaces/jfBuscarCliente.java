@@ -22,6 +22,7 @@ public class jfBuscarCliente extends javax.swing.JFrame {
         initComponents();
         act = true;
         Cargar("");
+        tblBuscarCliente.getTableHeader().setReorderingAllowed(false);
     }
     
     void Cargar(String Valor) {
@@ -191,7 +192,6 @@ public class jfBuscarCliente extends javax.swing.JFrame {
     private void tblBuscarClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBuscarClienteMouseClicked
         // TODO add your handling code here:
         fila = tblBuscarCliente.getSelectedRow();
-        Interfaces.Ventas.getIdClientes = tblBuscarCliente.getValueAt(fila, 0).toString();
     }//GEN-LAST:event_tblBuscarClienteMouseClicked
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
