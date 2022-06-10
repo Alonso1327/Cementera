@@ -15,6 +15,8 @@ public class JFPrincipal extends javax.swing.JFrame {
     Ventas venta = new Ventas();
     frmProveedores proveedores = new frmProveedores();
     frmClientes clientes = new frmClientes();
+    jfDetalleVenta detalleVenta = new jfDetalleVenta();
+    jfProductos productos = new jfProductos();
     
     /**
      * Creates new form JFPrincipal
@@ -60,15 +62,20 @@ public class JFPrincipal extends javax.swing.JFrame {
 
         jPanel1.setLayout(null);
 
-        jLabel2.setFont(new java.awt.Font("Berlin Sans FB", 0, 24)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("MATERIALES MARICARMEN");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(100, 30, 360, 40);
+        jLabel2.setBounds(80, 30, 410, 40);
 
         btnDetalleVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Detalle_Venta.png"))); // NOI18N
         btnDetalleVenta.setText("Detalle Venta");
         btnDetalleVenta.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnDetalleVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDetalleVentaActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnDetalleVenta);
         btnDetalleVenta.setBounds(210, 80, 140, 80);
 
@@ -114,6 +121,11 @@ public class JFPrincipal extends javax.swing.JFrame {
 
         btnProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Productos.png"))); // NOI18N
         btnProductos.setText("Producctos");
+        btnProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProductosActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnProductos);
         btnProductos.setBounds(300, 210, 140, 80);
 
@@ -139,6 +151,11 @@ public class JFPrincipal extends javax.swing.JFrame {
 
         jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Detalle_Venta.png"))); // NOI18N
         jMenuItem2.setText("Detalle Ventas");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem2);
 
         miClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Clientes.png"))); // NOI18N
@@ -161,6 +178,11 @@ public class JFPrincipal extends javax.swing.JFrame {
 
         jMenuItem5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Productos.png"))); // NOI18N
         jMenuItem5.setText("Productos");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem5);
 
         jMenuItem6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Salir.png"))); // NOI18N
@@ -215,6 +237,26 @@ public class JFPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         clientes.setVisible(true);
     }//GEN-LAST:event_miClientesActionPerformed
+
+    private void btnDetalleVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetalleVentaActionPerformed
+        // TODO add your handling code here:
+        detalleVenta.setVisible(true);
+    }//GEN-LAST:event_btnDetalleVentaActionPerformed
+
+    private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
+        // TODO add your handling code here:
+        productos.setVisible(true);
+    }//GEN-LAST:event_btnProductosActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        detalleVenta.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        productos.setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -7,6 +7,11 @@ public class ConexionMySQL {
     
     Connection conect = null;
     
+    //static String scontra = JOptionPane.showInputDialog(null, "Ingreasa la contraseña");
+    //int a = 0;
+    
+    
+    
     public Connection ConexionMySQL()
     {
         try 
@@ -15,7 +20,7 @@ public class ConexionMySQL {
          conect = DriverManager.getConnection("jdbc:mysql://localhost/Cementera","root","Polo76K$");
          System.out.print("Conexion a Tienda exitosa");
         } catch (Exception error) {
-         JOptionPane.showMessageDialog(null,"Error en la conxion: " + error);
+         JOptionPane.showMessageDialog(null,"Error en la conexion: " + error);
          
         }
         return conect;
