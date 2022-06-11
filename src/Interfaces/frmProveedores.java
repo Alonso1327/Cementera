@@ -354,6 +354,7 @@ public class frmProveedores extends javax.swing.JFrame {
         jPanel1.getAccessibleContext().setAccessibleName("CONTROL DE PROVEEDOR");
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblProveedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProveedoresMouseClicked
