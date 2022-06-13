@@ -1,6 +1,7 @@
 package Interfaces;
 
 import Clases.ConexionMySQL;
+import java.io.InputStream;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -391,9 +392,11 @@ public class frmProveedores extends javax.swing.JFrame {
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
         // TODO add your handling code here:
         try {
-            String Ruta = "C:\\Users\\BRISEIDA\\OneDrive\\Documentos\\NetBeansProjects\\Cementera\\src\\Reportes\\Reporte_Proveedores.jasper";
-            JasperReport reporte = null;
-            reporte = (JasperReport) JRLoader.loadObjectFromFile(Ruta);
+            String Ruta = "/Reportes/Reporte_Proveedores.jasper";
+            InputStream archivo = getClass().getResourceAsStream(Ruta);
+            
+                 JasperReport reporte = null ; 
+                  reporte=(JasperReport) JRLoader.loadObject(archivo);
 
             JasperPrint imprimir = JasperFillManager.
                     fillReport(reporte, null, cnn.ConexionMySQL());

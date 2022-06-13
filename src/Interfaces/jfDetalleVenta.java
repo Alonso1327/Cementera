@@ -6,6 +6,7 @@
 package Interfaces;
 
 import Clases.ConexionMySQL;
+import java.io.InputStream;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
@@ -103,7 +104,7 @@ public class jfDetalleVenta extends javax.swing.JFrame {
         btnNuevo.setEnabled(true);
     }
     
-    void Desbloquerbotones(){
+    void Desbloquearbotones(){
         btnActualizar.setEnabled(true);
         btnBuscarProducto.setEnabled(true);
         btnCancelar.setEnabled(true);
@@ -693,7 +694,7 @@ public class jfDetalleVenta extends javax.swing.JFrame {
         txtPrecio.setEnabled(false);
         txtSubtotal.setEnabled(false);
         
-        Desbloquerbotones();
+        Desbloquearbotones();
         btnGuardar.setEnabled(false);
         
     }//GEN-LAST:event_tblDetalleVentaMouseClicked
@@ -705,9 +706,11 @@ public class jfDetalleVenta extends javax.swing.JFrame {
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
         // TODO add your handling code here:
         try{
-        String Ruta = "C:\\Users\\BRISEIDA\\OneDrive\\Documentos\\NetBeansProjects\\Cementera\\src\\Reportes\\Detalle_Venta.jasper";
+         String Ruta = "/Reportes/Detalle_Venta.jasper";
+            InputStream archivo = getClass().getResourceAsStream(Ruta);
+            
                  JasperReport reporte = null ; 
-                  reporte=(JasperReport) JRLoader.loadObjectFromFile(Ruta);
+                  reporte=(JasperReport) JRLoader.loadObject(archivo);
             
                   JasperPrint imprimir = JasperFillManager.
                           fillReport(reporte,null,cnn.ConexionMySQL());

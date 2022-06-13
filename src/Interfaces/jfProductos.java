@@ -1,7 +1,9 @@
 package Interfaces;
 
 import Clases.ConexionMySQL;
+import static Interfaces.jfDetalleVenta.cbPresentacion;
 import java.awt.event.KeyEvent;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.logging.*;
 import javax.swing.JOptionPane;
@@ -38,7 +40,7 @@ public class jfProductos extends javax.swing.JFrame {
         txtIDProducto.setEnabled(false);
         txtNombre.setEnabled(false);
         txtCantidad.setEnabled(false);
-        txtIDUnidad.setEnabled(false);
+        cbPresentacion.setEnabled(false);
         txtPreciocompra.setEnabled(false);
         txtPrecioventa.setEnabled(false);
         txtIDProveedor.setEnabled(false);
@@ -48,13 +50,13 @@ public class jfProductos extends javax.swing.JFrame {
         txtIDProducto.setEnabled(true);
         txtNombre.setEnabled(true);
         txtCantidad.setEnabled(true);
-        txtIDUnidad.setEnabled(true);
+        cbPresentacion.setEnabled(true);
         txtPreciocompra.setEnabled(true);
         txtPrecioventa.setEnabled(true);
         txtIDProveedor.setEnabled(true);
         txtIDProducto.grabFocus();
     }
-    void Desbloquerbotones(){
+    void Desbloquearbotones(){
         btnActualizar.setEnabled(true);
         btnBuscar.setEnabled(true);
         btnCancelar.setEnabled(true);
@@ -66,7 +68,7 @@ public class jfProductos extends javax.swing.JFrame {
         txtIDProducto.setText("");
         txtNombre.setText("");
         txtCantidad.setText("");
-        txtIDUnidad.setText("");
+        //cbPresentacion.set("");
         txtPreciocompra.setText("");
         txtPrecioventa.setText("");
         txtIDProveedor.setText("");
@@ -78,7 +80,7 @@ public class jfProductos extends javax.swing.JFrame {
                 + "where concat(IDProducto, NombreProducto, "
                 + "+ Cantidad , IDUnidad, PrecioCompra, PrecioVenta, IDProveedor) "
                 + "like '%" + Valor + "%'";
-        String[] Titulos = {"IDProducto", "Nombre del Producto", "Cantidad", "IDUnidad",
+        String[] Titulos = {"IDProducto", "Nombre del Producto", "Cantidad", "Presentacion",
             "Precio de compra", "Precio de Venta", "IDProveedor"};
         String[] Registros = new String[100];
         modelo = new DefaultTableModel(null, Titulos);
@@ -124,7 +126,6 @@ public class jfProductos extends javax.swing.JFrame {
         txtIDProducto = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
         txtCantidad = new javax.swing.JTextField();
-        txtIDUnidad = new javax.swing.JTextField();
         txtPreciocompra = new javax.swing.JTextField();
         txtPrecioventa = new javax.swing.JTextField();
         txtIDProveedor = new javax.swing.JTextField();
@@ -134,6 +135,7 @@ public class jfProductos extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
+        cbPresentacion = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProductos = new javax.swing.JTable();
         btnReporte = new javax.swing.JButton();
@@ -227,6 +229,8 @@ public class jfProductos extends javax.swing.JFrame {
             }
         });
 
+        cbPresentacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BTO", "PZA", "M3", "CMN", "KG", "TON" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -246,10 +250,10 @@ public class jfProductos extends javax.swing.JFrame {
                     .addComponent(txtIDProducto)
                     .addComponent(txtNombre)
                     .addComponent(txtCantidad)
-                    .addComponent(txtIDUnidad)
                     .addComponent(txtPreciocompra)
                     .addComponent(txtPrecioventa)
-                    .addComponent(txtIDProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
+                    .addComponent(txtIDProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                    .addComponent(cbPresentacion, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(69, 69, 69)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -282,8 +286,8 @@ public class jfProductos extends javax.swing.JFrame {
                             .addComponent(jLabel3))
                         .addGap(26, 26, 26)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtIDUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
+                            .addComponent(jLabel4)
+                            .addComponent(cbPresentacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(20, 20, 20)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtPreciocompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -292,14 +296,11 @@ public class jfProductos extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
                             .addComponent(txtPrecioventa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel7)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
                             .addComponent(txtIDProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())
+                        .addContainerGap(17, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(42, 42, 42)
                         .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -342,16 +343,16 @@ public class jfProductos extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(339, 339, 339))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 813, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(364, 364, 364))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -360,9 +361,9 @@ public class jfProductos extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8))
+                .addGap(15, 15, 15))
         );
 
         pack();
@@ -394,7 +395,7 @@ public class jfProductos extends javax.swing.JFrame {
         id = txtIDProducto.getText();
         nombre = txtNombre.getText();
         cantidad = txtCantidad.getText();
-        unidad = txtIDUnidad.getText();
+        unidad = cbPresentacion.getSelectedItem().toString();
         compra = txtPreciocompra.getText();
         venta = txtPrecioventa.getText();
         proveedor = txtIDProveedor.getText();
@@ -469,7 +470,7 @@ public class jfProductos extends javax.swing.JFrame {
         txtIDProducto.setText(tblProductos.getValueAt(filaSele, 0).toString());
         txtNombre.setText(tblProductos.getValueAt(filaSele, 1).toString());
         txtCantidad.setText(tblProductos.getValueAt(filaSele, 2).toString());
-        txtIDUnidad.setText(tblProductos.getValueAt(filaSele, 3).toString());
+        cbPresentacion.setSelectedItem(tblProductos.getValueAt(filaSele, 3).toString());
         txtPreciocompra.setText(tblProductos.getValueAt(filaSele, 4).toString());
         txtPrecioventa.setText(tblProductos.getValueAt(filaSele, 5).toString());
         txtIDProveedor.setText(tblProductos.getValueAt(filaSele, 6).toString());
@@ -480,10 +481,10 @@ public class jfProductos extends javax.swing.JFrame {
         txtPrecioventa.setEnabled(true);
         txtIDProducto.setEnabled(false);
         txtNombre.setEnabled(false);
-        txtIDUnidad.setEnabled(false);
+        cbPresentacion.setEnabled(false);
         txtIDProveedor.setEnabled(false);
         btnActualizar.setEnabled(true);
-        Desbloquerbotones();
+        Desbloquearbotones();
         
     }//GEN-LAST:event_tblProductosMouseClicked
 
@@ -562,9 +563,11 @@ public class jfProductos extends javax.swing.JFrame {
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
         // TODO add your handling code here:
         try{
-        String Ruta = "C:\\Users\\BRISEIDA\\OneDrive\\Documentos\\NetBeansProjects\\Cementera\\src\\Reportes\\producto.jasper";
+        String Ruta = "/Reportes/producto.jasper";
+            InputStream archivo = getClass().getResourceAsStream(Ruta);
+            
                  JasperReport reporte = null ; 
-                  reporte=(JasperReport) JRLoader.loadObjectFromFile(Ruta);
+                  reporte=(JasperReport) JRLoader.loadObject(archivo);
             
                   JasperPrint imprimir = JasperFillManager.
                           fillReport(reporte,null,cnn.ConexionMySQL());
@@ -624,6 +627,7 @@ public class jfProductos extends javax.swing.JFrame {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnReporte;
+    private javax.swing.JComboBox<String> cbPresentacion;
     private javax.swing.JEditorPane jEditorPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -639,7 +643,6 @@ public class jfProductos extends javax.swing.JFrame {
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtIDProducto;
     private javax.swing.JTextField txtIDProveedor;
-    private javax.swing.JTextField txtIDUnidad;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtPreciocompra;
     private javax.swing.JTextField txtPrecioventa;
