@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
-import javax.swing.JRootPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -17,21 +16,21 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
-public  class Ventas extends javax.swing.JFrame {
+public class Ventas extends javax.swing.JFrame {
 
     int obtenerFecha = 1;
     int obtenerHora = 2;
     int contador = 0;
     int ultimofolio = 0;
-    
+
     public static String getIdClientes = "";
     boolean decimal = false;
     int decimalPos = 0;
-    ConexionMySQL cnn = new ConexionMySQL(); 
+    ConexionMySQL cnn = new ConexionMySQL();
     Connection cn = cnn.ConexionMySQL();
     jfBuscarCliente buscarCliente = new jfBuscarCliente();
-
-    String fol, idClin = "", fecha, hor, total="";
+    jfrmRegistrarVenta registrar = new jfrmRegistrarVenta();
+    String fol, idClin = "", fecha, hor, total = "";
 
     DefaultTableModel modelo;
     int Filas;
@@ -40,16 +39,16 @@ public  class Ventas extends javax.swing.JFrame {
         initComponents();
         Cargar("");
         txtFieldsActualizar(false);
-
+        txtTotal.setText("");
         tblVenta.getTableHeader().setReorderingAllowed(false);
         this.setResizable(false);
         DesactivarBotones(false);
-        
 
     }
 
     void Cargar(String valor) {
-        String Consulta = "select * from Ventas " + "where concat(NoFolio, IDCliente,Fecha,Hora,Total)"
+        String Consulta = "select * from Ventas " + "where concat(NoFolio, "
+                + "IDCliente,Fecha,Hora,Total)"
                 + " like '%" + valor + "%'";
         String[] Titulos = {"Folio", "Clientes", "Fecha", "Hora", "Total"};
         String[] Registros = new String[9];
@@ -73,16 +72,67 @@ public  class Ventas extends javax.swing.JFrame {
             }
             tblVenta.setModel(modelo);
         } catch (Exception error) {
-            JOptionPane.showMessageDialog(null, "Error al cargar la tabla de Clientes: " + error.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al cargar la tabla de "
+                    + "Clientes: " + error.getMessage());
+        }
+    }
+
+    void ActualizarRegistro() {
+        getDatos();
+        if (idClin.length() > 0 && total.length() > 0) {
+            if (Actualizar() > 0) {
+                JOptionPane.showMessageDialog(this, "DATOS ACTUALIZADOS");
+                txtFieldsActualizar(false);
+                vaciarCampos();
+                DesactivarBotones(false);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Faltan Datos por ingresar");
+        }
+    }
+
+    void EliminarRegistro(String registroEliminar) {
+        String SQL, SQLD;
+        int opcion;
+        SQL = "Delete from Ventas where NoFolio='" + registroEliminar + "'";
+        SQLD = "Delete from DetalleVentas where idVenta='" + registroEliminar + "'";
+        if (!btnGuardar.isEnabled()) {
+            opcion = JOptionPane.showConfirmDialog(this, "¿Esta seguro que desea"
+                    + " eliminar este registro?");
+        } else {
+            opcion = 0;
+        }
+        try {
+
+            if (opcion == 0) {
+
+                PreparedStatement ps1 = cn.prepareStatement(SQLD);
+                PreparedStatement ps = cn.prepareStatement(SQL);
+                ps1.executeUpdate();
+                ps.executeUpdate();
+
+                if (!btnGuardar.isEnabled()) {
+                    JOptionPane.showMessageDialog(null, "Eliminado correctamente");
+                }
+                Cargar("");
+                vaciarCampos();
+                txtFieldsActualizar(false);
+                DesactivarBotones(false);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e);
         }
     }
 
     public String obtenerFechaHoraActual(int valorAObtener) {
         String obtenerDato;
         if (valorAObtener == obtenerFecha) {
-            obtenerDato = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+            obtenerDato = new SimpleDateFormat("yyyy-MM-dd").
+                    format(Calendar.getInstance().getTime());
         } else {
-            obtenerDato = new SimpleDateFormat("hh:ss").format(Calendar.getInstance().getTime());
+            obtenerDato = new SimpleDateFormat("hh:ss").
+                    format(Calendar.getInstance().getTime());
         }
         return obtenerDato;
     }
@@ -120,6 +170,7 @@ public  class Ventas extends javax.swing.JFrame {
         btnActualizar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        btnEditarProducto = new javax.swing.JButton();
         ftxtFecha = new javax.swing.JTextField();
         btnBuscarCliente = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -229,6 +280,13 @@ public  class Ventas extends javax.swing.JFrame {
             }
         });
 
+        btnEditarProducto.setText("Editar Producto");
+        btnEditarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarProductoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -242,6 +300,10 @@ public  class Ventas extends javax.swing.JFrame {
                     .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnEditarProducto)
+                .addGap(30, 30, 30))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -256,7 +318,8 @@ public  class Ventas extends javax.swing.JFrame {
                 .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnEditarProducto))
         );
 
         ftxtFecha.setEditable(false);
@@ -417,34 +480,12 @@ public  class Ventas extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-           getDatos();
-           //System.out.println(idc);
-           if(idClin.length() > 0 && total.length() > 0){
-               if(InsertarDatos()> 0){
-                    DesactivarBotones(false);
-                    Cargar("");
-                    vaciarCampos();
-                    txtFieldsActualizar(false);
-                }
-           }else{
-                JOptionPane.showMessageDialog(this, "Faltan Datos por ingresar");
-           }
+        ActualizarRegistro();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         // TODO add your handling code here:
-        getDatos();
-         if(idClin.length() > 0 && total.length() > 0){
-            if(Actualizar() > 0)
-            {
-                JOptionPane.showMessageDialog(this, "DATOS ACTUALIZADOS");
-                txtFieldsActualizar(false);
-                vaciarCampos();
-                DesactivarBotones(false);
-            }
-         }else{
-             JOptionPane.showMessageDialog(this, "Faltan Datos por ingresar");
-         }
+        Actualizar();
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void tblVentaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVentaMouseClicked
@@ -464,50 +505,37 @@ public  class Ventas extends javax.swing.JFrame {
         txtFolio.setEnabled(false);
     }//GEN-LAST:event_tblVentaMouseClicked
 
-    public void ObteberIdCliente(String valoridCliente)
-    {
+    public void ObteberIdCliente(String valoridCliente) {
         txtIDCliente.setText(valoridCliente);
     }
-    
+
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-        String SQL;
-        int opcion;
-        SQL = "Delete from Ventas where NoFolio='" + txtFolio.getText() + "'";
-        try {
-            opcion = JOptionPane.showConfirmDialog(this, "¿Esta seguro que desea eliminar este registro?");
-            if (opcion == 0) {
-                PreparedStatement ps = cn.prepareStatement(SQL);
-                ps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Eliminado correctamente");
-                Cargar("");
-                vaciarCampos();
-                txtFieldsActualizar(false);
-                DesactivarBotones(false);
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e);
-        }
-
+        EliminarRegistro(txtFolio.getText());
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
         vaciarCampos();
-        
+
         ftxtFecha.setText(obtenerFechaHoraActual(obtenerFecha));
         txtHora.setText(obtenerFechaHoraActual(obtenerHora));
         int acFolio = ultimofolio + 1;
         txtFolio.setText(Integer.toString(acFolio));
-        
+
         btnCancelar.setEnabled(true);
         btnGuardar.setEnabled(true);
         btnBuscarCliente.setEnabled(true);
         btnNuevo.setEnabled(false);
-        
+        btnEditarProducto.setEnabled(true);
+
         txtFieldsActualizar(true);
-        
+        registrar.txtFolioB.setText(txtFolio.getText());
+        registrar.CargarTabla();
+        registrar.vaciarTextField();
+        registrar.setVisible(true);
+
+        InsertarDatos();
 
     }//GEN-LAST:event_btnNuevoActionPerformed
 
@@ -527,9 +555,14 @@ public  class Ventas extends javax.swing.JFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
+        if (btnGuardar.isEnabled()) {
+            EliminarRegistro(txtFolio.getText());
+        }
         txtFieldsActualizar(false);
         vaciarCampos();
         DesactivarBotones(false);
+
+
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtFolioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFolioKeyTyped
@@ -562,23 +595,21 @@ public  class Ventas extends javax.swing.JFrame {
 
         int key = evt.getKeyChar();
         boolean numeros = (key >= 48 && key <= 57);
-     
-        if(key == 46 && decimal == false){
+
+        if (key == 46 && decimal == false) {
             decimal = true;
             decimalPos = txtTotal.getText().length();
-        }else{
-            if(key == 8 && txtTotal.getText().length() == decimalPos){
+        } else {
+            if (key == 8 && txtTotal.getText().length() == decimalPos) {
                 decimal = false;
                 decimalPos = 0;
             }
-            if (!numeros){
+            if (!numeros) {
                 evt.consume();
-            }   
+            }
         }
-        
-        
 
-        
+
     }//GEN-LAST:event_txtTotalKeyTyped
 
     private void ftxtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftxtFechaActionPerformed
@@ -587,31 +618,30 @@ public  class Ventas extends javax.swing.JFrame {
 
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
         // TODO add your handling code here:
-        try{
+        try {
             String Ruta = "/Reportes/rptVentas.jasper";
             InputStream archivo = getClass().getResourceAsStream(Ruta);
-            
-            JasperReport reporte = null ; 
-            reporte=(JasperReport) JRLoader.loadObject(archivo);
-            
-            JasperPrint imprimir = JasperFillManager.fillReport(reporte,null,cnn.ConexionMySQL());
 
-            JasperViewer visor = new JasperViewer (imprimir, false);
+            JasperReport reporte = null;
+            reporte = (JasperReport) JRLoader.loadObject(archivo);
+
+            JasperPrint imprimir = JasperFillManager.
+                    fillReport(reporte, null, cnn.ConexionMySQL());
+
+            JasperViewer visor = new JasperViewer(imprimir, false);
             visor.setTitle("Reporte Ventas");
             visor.setVisible(true);
-       }
-       catch(Exception e)
-       {
-           System.out.println("Error: "+ e);
-           
-       }
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+
+        }
     }//GEN-LAST:event_btnReporteActionPerformed
 
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
         // TODO add your handling code here:
-        
+
         buscarCliente.setVisible(true);
-        
+
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
@@ -624,12 +654,20 @@ public  class Ventas extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
-        if(buscarCliente.isShowing()== true){
+        if (buscarCliente.isShowing() == true) {
             buscarCliente.dispose();
-        }else{
+        } else {
             this.dispose();
         }
     }//GEN-LAST:event_formWindowClosing
+
+    private void btnEditarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarProductoActionPerformed
+        // TODO add your handling code here:
+        registrar.txtFolioB.setText(txtFolio.getText());
+        registrar.CargarTabla();
+        registrar.vaciarTextField();
+        registrar.setVisible(true);
+    }//GEN-LAST:event_btnEditarProductoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -670,6 +708,7 @@ public  class Ventas extends javax.swing.JFrame {
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnEditarProducto;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnNuevo;
@@ -686,10 +725,10 @@ public  class Ventas extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblVenta;
     private javax.swing.JTextField txtBuscar;
-    private javax.swing.JTextField txtFolio;
+    public static javax.swing.JTextField txtFolio;
     private javax.swing.JTextField txtHora;
     public static javax.swing.JTextField txtIDCliente;
-    private javax.swing.JTextField txtTotal;
+    public static javax.swing.JTextField txtTotal;
     // End of variables declaration//GEN-END:variables
 
     private void vaciarCampos() {
@@ -715,54 +754,58 @@ public  class Ventas extends javax.swing.JFrame {
         btnEliminar.setEnabled(activacion);
         btnCancelar.setEnabled(activacion);
         btnBuscarCliente.setEnabled(activacion);
+        btnEditarProducto.setEnabled(activacion);
     }
-    
-    private int InsertarDatos(){
+
+    private int InsertarDatos() {
         getDatos();
+
         int n = 0;
         String SQL;
         SQL = "insert into Ventas (NoFolio,IDCliente,Fecha,Hora, Total)"
                 + " values(?,?,?,?,?)";
         try {
             PreparedStatement ps = cn.prepareStatement(SQL);
-            ps.setString(1, fol);
-            ps.setString(2, idClin);
-            ps.setString(3, fecha);
-            ps.setString(4, hor);
-            ps.setString(5, total);
-            
-            
-            n = ps.executeUpdate();
-            if (n > 0) {
-                JOptionPane.showMessageDialog(this, "Venta Insertado");
-                
+            if (idClin.length() > 0 && total.length() > 0) {
+                ps.setString(1, fol);
+                ps.setString(2, idClin);
+                ps.setString(3, fecha);
+                ps.setString(4, hor);
+                ps.setString(5, total);
+            } else {
+                ps.setString(1, fol);
+                ps.setString(2, "1");
+                ps.setString(3, fecha);
+                ps.setString(4, hor);
+                ps.setString(5, "1");
             }
-            
+
+            n = ps.executeUpdate();
+
         } catch (Exception error) {
-            JOptionPane.showMessageDialog(this, "Error al insertar: " +
-                    error.getMessage() + "\n" + error);
+            JOptionPane.showMessageDialog(this, "Error al insertar: "
+                    + error.getMessage() + "\n" + error);
         }
         return n;
     }
-    
-    private int Actualizar()
-    {
+
+    private int Actualizar() {
         int n = 0;
         try {
-            String sql = "Update Ventas set IDCliente = '" 
+            String sql = "Update Ventas set IDCliente = '"
                     + txtIDCliente.getText() + "',"
-                    + "Fecha = '" + ftxtFecha.getText() + 
-                    "'," + " Hora = '" + txtHora.getText() + "', "
-                    + "Total = '" + txtTotal.getText() + "' where NoFolio = '" +
-                    txtFolio.getText() + "'";
+                    + "Fecha = '" + ftxtFecha.getText()
+                    + "'," + " Hora = '" + txtHora.getText() + "', "
+                    + "Total = '" + txtTotal.getText() + "' where NoFolio = '"
+                    + txtFolio.getText() + "'";
             PreparedStatement ps = cn.prepareStatement(sql);
             n = ps.executeUpdate();
             Cargar("");
-            
+
         } catch (Exception error) {
             JOptionPane.showMessageDialog(this, "Error: " + error.getMessage());
         }
-        
+
         return n;
     }
 }

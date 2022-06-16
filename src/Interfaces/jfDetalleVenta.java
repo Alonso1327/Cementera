@@ -27,7 +27,7 @@ public class jfDetalleVenta extends javax.swing.JFrame {
     int Filas;
     boolean decimal = false;
     int decimalPos=0;
-    jfBuscarProducto bProducto = new jfBuscarProducto();
+    jfBuscarProducto bProducto = new jfBuscarProducto("jfVentaD");
     private int ultimoId;
     
     public jfDetalleVenta() {
@@ -454,6 +454,7 @@ public class jfDetalleVenta extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblDetalleVenta.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblDetalleVenta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblDetalleVentaMouseClicked(evt);
@@ -472,23 +473,23 @@ public class jfDetalleVenta extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 862, Short.MAX_VALUE))
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnReporte)
                 .addGap(403, 403, 403))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 862, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(16, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnReporte)
@@ -517,7 +518,8 @@ public class jfDetalleVenta extends javax.swing.JFrame {
                 JOptionPane.YES_NO_OPTION);
         try {
             if(valor ==0){
-                PreparedStatement elim = cn.prepareStatement("DELETE FROM DetalleVentas WHERE IDDetalleVenta='" + txtIDDetalleVenta.getText() + "'");
+                PreparedStatement elim = cn.prepareStatement("DELETE FROM DetalleVentas WHERE IDDetalleVenta='"
+                        + txtIDDetalleVenta.getText() + "'");
 
                 int n = elim.executeUpdate();
                 if (n>0) {

@@ -13,6 +13,7 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+
 /**
  *
  * @author alore
@@ -24,11 +25,15 @@ public class jfBuscarProducto extends javax.swing.JFrame {
 
     DefaultTableModel modelo;
     static int fila;
-    public jfBuscarProducto() {
+    static String JframeAct;
+    public jfBuscarProducto(String activo) {
         initComponents();
         Cargar("");
         tblBProductos.getTableHeader().setReorderingAllowed(false);
+        JframeAct = activo;
     }
+
+   
     
     public String Tomardatos(int pos)
     {
@@ -182,11 +187,21 @@ public class jfBuscarProducto extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        jfDetalleVenta.txtIDProducto.setText(Tomardatos(0));
-        jfDetalleVenta.txtNombreProducto.setText(Tomardatos(1));
-        jfDetalleVenta.txtPrecio.setText(Tomardatos(5));
-        jfDetalleVenta.cbPresentacion.setSelectedItem(Tomardatos(3));
-        this.dispose();
+        if(JframeAct == "jfVentaD"){
+            jfDetalleVenta.txtIDProducto.setText(Tomardatos(0));
+            jfDetalleVenta.txtNombreProducto.setText(Tomardatos(1));
+            jfDetalleVenta.txtPrecio.setText(Tomardatos(5));
+            jfDetalleVenta.cbPresentacion.setSelectedItem(Tomardatos(3));
+            this.dispose();
+        }else
+        {
+            jfrmRegistrarVenta.idP = Tomardatos(0);
+            jfrmRegistrarVenta.txtNombreProducto.setText(Tomardatos(1));
+            jfrmRegistrarVenta.txtPrecioUnidad.setText(Tomardatos(5));
+            jfrmRegistrarVenta.txtPrecentacion.setText(Tomardatos(3));
+            this.dispose();
+        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -229,7 +244,7 @@ public class jfBuscarProducto extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new jfBuscarProducto().setVisible(true);
+                new jfBuscarProducto("").setVisible(true);
             }
         });
     }
