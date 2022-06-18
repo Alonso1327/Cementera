@@ -25,7 +25,7 @@ public class jfBuscarProducto extends javax.swing.JFrame {
 
     DefaultTableModel modelo;
     static int fila;
-    static String JframeAct;
+    public String JframeAct;
     public jfBuscarProducto(String activo) {
         initComponents();
         Cargar("");
@@ -199,9 +199,12 @@ public class jfBuscarProducto extends javax.swing.JFrame {
             jfrmRegistrarVenta.txtNombreProducto.setText(Tomardatos(1));
             jfrmRegistrarVenta.txtPrecioUnidad.setText(Tomardatos(5));
             jfrmRegistrarVenta.txtPrecentacion.setText(Tomardatos(3));
+            System.out.println("\nvalorer: " + 
+                    jfrmRegistrarVenta.txtNombreProducto.getText() + " 1a");
             this.dispose();
         }
-        
+        System.out.println("\nvalorer: " + 
+                    jfrmRegistrarVenta.txtNombreProducto.getText() + " 2a");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

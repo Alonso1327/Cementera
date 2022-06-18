@@ -45,6 +45,24 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
 
             
        });
+       txtPrecioUnidad.getDocument().addDocumentListener(new DocumentListener(){
+            @Override
+            public void insertUpdate(DocumentEvent de) {
+                obtenerSubtotal();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent de) {
+                obtenerSubtotal();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent de) {
+                obtenerSubtotal();
+            }
+
+            
+       });
         tblRegistrarVenta.getTableHeader().setReorderingAllowed(false);
     }
     private void obtenerSubtotal() {
@@ -179,6 +197,7 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
     public void ActualizarProductos(){
         //if(idDT.length() > 0){
         String sql;
+        if(txtNombreProducto.getText().length() > 0){
         if(idP == null){
             sql ="update DetalleVentas set "
                     + " NombreProducto = '" + txtNombreProducto.getText()
@@ -209,7 +228,9 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, e);
             }
             
-        //}
+        }else{
+            JOptionPane.showMessageDialog(this, "Ningun registro seleccionado para actualizar");
+        }
     }
     
     public void EliminarDato(String consulta){

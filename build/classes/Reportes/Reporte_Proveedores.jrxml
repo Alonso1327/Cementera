@@ -22,14 +22,14 @@ FROM
 	<title>
 		<band height="131" splitType="Stretch">
 			<staticText>
-				<reportElement x="85" y="10" width="268" height="44"/>
-				<textElement>
-					<font size="18" isBold="true"/>
+				<reportElement x="85" y="39" width="268" height="44"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[REPORTE DE PROVEEDORES]]></text>
 			</staticText>
 			<image>
-				<reportElement x="395" y="10" width="236" height="118"/>
+				<reportElement x="353" y="13" width="236" height="118"/>
 				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\BRISEIDA\\OneDrive\\Documentos\\NetBeansProjects\\Cementera\\src\\img_rpt\\PROVEEDOR.jpg"]]></imageExpression>
 			</image>
 		</band>
@@ -40,47 +40,63 @@ FROM
 	<columnHeader>
 		<band height="26" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[No.Proveedor]]></text>
+				<reportElement x="0" y="0" width="58" height="20"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ID ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="100" y="0" width="118" height="20"/>
-				<textElement/>
-				<text><![CDATA[Nombre del Proveedor]]></text>
+				<reportElement x="74" y="0" width="144" height="20"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE DEL PROVEEEDOR]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="218" y="0" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[Telefono]]></text>
+				<reportElement x="230" y="0" width="100" height="20"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TELEFONO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="318" y="0" width="156" height="26"/>
-				<textElement/>
-				<text><![CDATA[Nombre de la Empresa]]></text>
+				<reportElement x="341" y="0" width="133" height="26"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE DE LA EMPRESA]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="23" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="100" height="20"/>
-				<textElement/>
+				<reportElement x="0" y="0" width="58" height="20"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{proveedores_IDProveedor}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="100" y="0" width="100" height="20"/>
-				<textElement/>
+				<reportElement x="74" y="0" width="144" height="20"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{proveedores_NombreProveedor}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="218" y="0" width="100" height="20"/>
-				<textElement/>
+				<reportElement x="230" y="0" width="100" height="20"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{proveedores_Telefono}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="318" y="0" width="156" height="20"/>
-				<textElement/>
+				<reportElement x="341" y="0" width="133" height="20"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{proveedores_NombreEmpresa}]]></textFieldExpression>
 			</textField>
 		</band>
