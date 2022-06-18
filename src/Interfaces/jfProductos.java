@@ -57,6 +57,33 @@ public class jfProductos extends javax.swing.JFrame {
         txtIDProveedor.setEnabled(true);
         txtIDProducto.grabFocus();
     }
+    void ActualizarRegistro(String cantidadActualizar)
+    {
+        try {
+            String sql = "update Productos set "
+                    + "NombreProducto = '" + txtNombre.getText()
+                    + "', Cantidad = '" + cantidadActualizar
+                    + "', PrecioCompra = '" + txtPreciocompra.getText()
+                    + "', PrecioVenta = '" + txtPrecioventa.getText()
+                    + "' where IDProducto = '" + txtIDProducto.getText()
+                    + "' ";
+            PreparedStatement ps = cn.prepareStatement(sql);
+            ps.executeUpdate();
+            Cargar("");
+            Limpiar();
+            Bloquear();
+            btnCancelar.setEnabled(false);
+            btnGuardar.setEnabled(false);
+            btnActualizar.setEnabled(false);
+            btnNuevo.setEnabled(true);
+            btnBuscar.setEnabled(true);
+            btnEliminar.setEnabled(true);
+            JOptionPane.showMessageDialog(this, "Datos actualizados");
+
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(this, "Error: " + error.getMessage());
+        }
+    }
     void Desbloquearbotones(){
         btnActualizar.setEnabled(true);
         btnBuscar.setEnabled(true);
@@ -73,6 +100,22 @@ public class jfProductos extends javax.swing.JFrame {
         txtPreciocompra.setText("");
         txtPrecioventa.setText("");
         txtIDProveedor.setText("");
+    }
+    
+    public void ActualizarInventario(int cantidad, String idModificar){
+        String busqueda = "select cantidad from productos where idproducto = "+
+                idModificar;
+        int cantidadactual = 0;
+        try {
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(busqueda);
+            if(rs.next()){
+                cantidadactual = rs.getInt("cantidad");
+            }
+            ActualizarRegistro(Integer.toString(cantidadactual + cantidad));
+            Cargar("");
+        } catch (Exception e) {
+        }
     }
 
     void Cargar(String Valor) {
@@ -138,6 +181,7 @@ public class jfProductos extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        btnActualizarInventario = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProductos = new javax.swing.JTable();
         btnReporte = new javax.swing.JButton();
@@ -233,19 +277,31 @@ public class jfProductos extends javax.swing.JFrame {
             }
         });
 
+        btnActualizarInventario.setText("jButton1");
+        btnActualizarInventario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarInventarioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(btnActualizarInventario)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -263,6 +319,8 @@ public class jfProductos extends javax.swing.JFrame {
                 .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnActualizarInventario)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -325,11 +383,11 @@ public class jfProductos extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
                             .addComponent(txtPrecioventa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addComponent(txtIDProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         tblProductos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -456,30 +514,7 @@ public class jfProductos extends javax.swing.JFrame {
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         // TODO add your handling code here:
-        try {
-            String sql = "update Productos set "
-                    + "NombreProducto = '" + txtNombre.getText()
-                    + "', Cantidad = '" + txtCantidad.getText()
-                    + "', PrecioCompra = '" + txtPreciocompra.getText()
-                    + "', PrecioVenta = '" + txtPrecioventa.getText()
-                    + "' where IDProducto = '" + txtIDProducto.getText()
-                    + "' ";
-            PreparedStatement ps = cn.prepareStatement(sql);
-            ps.executeUpdate();
-            Cargar("");
-            Limpiar();
-            Bloquear();
-            btnCancelar.setEnabled(false);
-            btnGuardar.setEnabled(false);
-            btnActualizar.setEnabled(false);
-            btnNuevo.setEnabled(true);
-            btnBuscar.setEnabled(true);
-            btnEliminar.setEnabled(true);
-            JOptionPane.showMessageDialog(this, "Datos actualizados");
-
-        } catch (Exception error) {
-            JOptionPane.showMessageDialog(this, "Error: " + error.getMessage());
-        }
+        ActualizarRegistro(txtCantidad.getText());
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void tblProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductosMouseClicked
@@ -600,6 +635,15 @@ public class jfProductos extends javax.swing.JFrame {
        }
     }//GEN-LAST:event_btnReporteActionPerformed
 
+    private void btnActualizarInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarInventarioActionPerformed
+        // TODO add your handling code here:
+        int cantidadAgregar = Integer.parseInt(JOptionPane.showInputDialog(this,
+                "Ingresa la cantidad comprada"));
+        
+         ActualizarInventario(cantidadAgregar, txtIDProducto.getText());
+       
+    }//GEN-LAST:event_btnActualizarInventarioActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -637,6 +681,7 @@ public class jfProductos extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnActualizarInventario;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEliminar;

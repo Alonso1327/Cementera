@@ -195,16 +195,20 @@ public class jfBuscarProducto extends javax.swing.JFrame {
             this.dispose();
         }else
         {
-            jfrmRegistrarVenta.idP = Tomardatos(0);
-            jfrmRegistrarVenta.txtNombreProducto.setText(Tomardatos(1));
-            jfrmRegistrarVenta.txtPrecioUnidad.setText(Tomardatos(5));
-            jfrmRegistrarVenta.txtPrecentacion.setText(Tomardatos(3));
-            System.out.println("\nvalorer: " + 
-                    jfrmRegistrarVenta.txtNombreProducto.getText() + " 1a");
-            this.dispose();
+            if(Integer.parseInt(Tomardatos(2))> 0)
+            {
+                jfrmRegistrarVenta.idP = Tomardatos(0);
+                jfrmRegistrarVenta.txtNombreProducto.setText(Tomardatos(1));
+                jfrmRegistrarVenta.txtPrecioUnidad.setText(Tomardatos(5));
+                jfrmRegistrarVenta.txtPrecentacion.setText(Tomardatos(3));
+                this.dispose();
+            }else
+            {
+                JOptionPane.showMessageDialog(this, "No se cuenta con mas producto");
+            }
+           
         }
-        System.out.println("\nvalorer: " + 
-                    jfrmRegistrarVenta.txtNombreProducto.getText() + " 2a");
+       
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

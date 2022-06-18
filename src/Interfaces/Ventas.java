@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -22,6 +24,8 @@ public class Ventas extends javax.swing.JFrame {
     int obtenerHora = 2;
     int contador = 0;
     int ultimofolio = 0;
+    
+    public static Map<String, String> Productos = new HashMap<String,String>();
 
     public static String getIdClientes = "";
     boolean decimal = false;
@@ -80,10 +84,27 @@ public class Ventas extends javax.swing.JFrame {
 
     void ActualizarRegistro() {
         getDatos();
+        String SQL2 = "Update productos set cantidad = cantidad - ?  where idproducto = ?";
         if (idClin.length() > 0 && total.length() > 0) {
             if (Actualizar() > 0) {
                 if(btnGuardar.isEnabled()){
+                    for (String clave:Productos.keySet()) {
+                        String valor = Productos.get(clave);
+                        try {
+                            SQL2 = "Update productos set cantidad = cantidad - "+valor+
+                                    "  where idproducto = "+clave;
+                            System.out.println("SQL2: "+ SQL2);
+                            PreparedStatement ps = cn.prepareStatement(SQL2);
+                            ps.executeUpdate();
+                                    
+                             System.out.println("el valor es: "+ valor);
+                        } catch (Exception e) {
+                           
+                        }
+                        
+                    }
                     JOptionPane.showMessageDialog(this, "Venta Registrada");
+                    
                 }else
                 {
                     JOptionPane.showMessageDialog(this, "DATOS ACTUALIZADOS");
@@ -844,7 +865,12 @@ public class Ventas extends javax.swing.JFrame {
             PreparedStatement ps = cn.prepareStatement(sql);
             n = ps.executeUpdate();
             Cargar("");
-            JOptionPane.showMessageDialog(this, "DATOS ACTUALIZADOS");
+            if(!btnGuardar.isEnabled()){
+                    
+                   JOptionPane.showMessageDialog(this, "DATOS ACTUALIZADOS");
+                    
+            }
+            
         } catch (Exception error) {
             JOptionPane.showMessageDialog(this, "Error: " + error.getMessage());
         }

@@ -2,6 +2,7 @@
 package Interfaces;
 
 import Clases.ConexionMySQL;
+import java.net.InterfaceAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,6 +17,8 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
 
     public static String idDe, idP;
     public int presU;
+    
+    
     jfBuscarProducto bProducto = new jfBuscarProducto("");
     DefaultTableModel modelo;
     public String idProducto, nomProducto, cantidadP,PrecioU, precentacion, sbtotalA,idDT;
@@ -461,6 +464,7 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
 
     private void btnBuscarPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPActionPerformed
         // TODO add your handling code here:
+        bProducto.Cargar("");
         bProducto.setVisible(true);
     }//GEN-LAST:event_btnBuscarPActionPerformed
 
@@ -480,9 +484,11 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        
+       // actualizarStock();
         // TODO add your handling code here:
         String idDetalle, idVenta, idProducto, nombre,precio, cantidad, presentacion, subtotal;
-        String SQL;
+        String SQL /*SQL2*/;
         idDetalle = idDe;
         idVenta = txtFolioB.getText();
         idProducto= idP;
@@ -495,6 +501,7 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
         SQL = "insert into DetalleVentas (IDDetalleVenta,IDVenta,IDProducto, NombreProducto, Precio, Cantidad, Presentacion, "
                 + "Subtotal) "
                 + "values(?,?,?,?,?,?,?,?)";
+        //SQL2 = "Update productos set cantidad = cantidad - ?  where idproducto = ?";
         try {
            PreparedStatement ps = cn.prepareStatement(SQL);
            ps.setString(1, idDetalle);
@@ -506,7 +513,13 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
            ps.setString(7, presentacion);
            ps.setString(8, subtotal);
            
+           //PreparedStatement ps2 = cn.prepareStatement(SQL2);
+           //ps2.setString(1, cantidad);
+           //ps2.setString(2, idProducto);
+           
            int n = ps.executeUpdate();
+           //ps2.executeUpdate();
+           Interfaces.Ventas.Productos.put(idProducto, cantidad);
            CargarTabla();
            obtenerUtimoR();
            vaciarTextField();
