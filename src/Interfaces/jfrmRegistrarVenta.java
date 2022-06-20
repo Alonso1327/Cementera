@@ -16,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
 public class jfrmRegistrarVenta extends javax.swing.JFrame {
 
     public static String idDe, idP;
+    public static int canAc;
     public int presU;
     
     
@@ -34,6 +35,7 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
             @Override
             public void insertUpdate(DocumentEvent de) {
                 obtenerSubtotal();
+                
             }
 
             @Override
@@ -44,6 +46,7 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
             @Override
             public void changedUpdate(DocumentEvent de) {
                 obtenerSubtotal();
+               
             }
 
             
@@ -52,16 +55,19 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
             @Override
             public void insertUpdate(DocumentEvent de) {
                 obtenerSubtotal();
+                 
             }
 
             @Override
             public void removeUpdate(DocumentEvent de) {
                 obtenerSubtotal();
+                 
             }
 
             @Override
             public void changedUpdate(DocumentEvent de) {
                 obtenerSubtotal();
+                
             }
 
             
@@ -183,12 +189,7 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
             if(rs.next())
             {   
                 idDT = rs.getString("IDDetalleVenta");
-               /* idProducto = rs.getString("IDProducto");
-                nomProducto = rs.getString("NombreProducto");
-                PrecioU = rs.getString("Precio");
-                cantidadP = rs.getString("Cantidad");
-                precentacion = rs.getString("Presentacion");
-                sbtotalA = rs.getString("Subtotal");*/
+              
             }
         } catch (Exception error) {
             JOptionPane.showMessageDialog(this,
@@ -198,7 +199,6 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
     }
     
     public void ActualizarProductos(){
-        //if(idDT.length() > 0){
         String sql;
         if(txtNombreProducto.getText().length() > 0){
         if(idP == null){
@@ -238,7 +238,6 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
     
     public void EliminarDato(String consulta){
         try {
-            //if(valor ==0){
                 PreparedStatement elim = cn.prepareStatement(consulta);
 
                 int n = elim.executeUpdate();
@@ -249,7 +248,6 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
                 else{
                     JOptionPane.showMessageDialog(null, "El detalle de venta no se borro");
                 }
-            //}
             
         } catch (SQLException error) {
             JOptionPane.showMessageDialog(null, error + "No se elimino el registro");
@@ -348,6 +346,12 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
         txtFolioB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtFolioBActionPerformed(evt);
+            }
+        });
+
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyTyped(evt);
             }
         });
 
@@ -487,8 +491,9 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
         
        // actualizarStock();
         // TODO add your handling code here:
+        
         String idDetalle, idVenta, idProducto, nombre,precio, cantidad, presentacion, subtotal;
-        String SQL /*SQL2*/;
+        String SQL;
         idDetalle = idDe;
         idVenta = txtFolioB.getText();
         idProducto= idP;
@@ -501,30 +506,31 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
         SQL = "insert into DetalleVentas (IDDetalleVenta,IDVenta,IDProducto, NombreProducto, Precio, Cantidad, Presentacion, "
                 + "Subtotal) "
                 + "values(?,?,?,?,?,?,?,?)";
-        //SQL2 = "Update productos set cantidad = cantidad - ?  where idproducto = ?";
-        try {
-           PreparedStatement ps = cn.prepareStatement(SQL);
-           ps.setString(1, idDetalle);
-           ps.setString(2, idVenta);
-           ps.setString(3, idProducto);
-           ps.setString(4, nombre);
-           ps.setString(5, precio);
-           ps.setString(6, cantidad);
-           ps.setString(7, presentacion);
-           ps.setString(8, subtotal);
-           
-           //PreparedStatement ps2 = cn.prepareStatement(SQL2);
-           //ps2.setString(1, cantidad);
-           //ps2.setString(2, idProducto);
-           
-           int n = ps.executeUpdate();
-           //ps2.executeUpdate();
-           Interfaces.Ventas.Productos.put(idProducto, cantidad);
-           CargarTabla();
-           obtenerUtimoR();
-           vaciarTextField();
-        } catch (Exception error) {
-            JOptionPane.showMessageDialog(this, "Error al insertar: " + error);
+        if(cantidad.length() > 0){
+            if(Revisar()){
+                try {
+                   PreparedStatement ps = cn.prepareStatement(SQL);
+                   ps.setString(1, idDetalle);
+                   ps.setString(2, idVenta);
+                   ps.setString(3, idProducto);
+                   ps.setString(4, nombre);
+                   ps.setString(5, precio);
+                   ps.setString(6, cantidad);
+                   ps.setString(7, presentacion);
+                   ps.setString(8, subtotal);
+
+                   int n = ps.executeUpdate();
+
+                   Interfaces.Ventas.Productos.put(idProducto, cantidad);
+                   CargarTabla();
+                   obtenerUtimoR();
+                   vaciarTextField();
+                } catch (Exception error) {
+                    JOptionPane.showMessageDialog(this, "Error al insertar: " + error);
+                }
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Cantidad aun no ingresada");
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -554,8 +560,7 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
     }//GEN-LAST:event_tblRegistrarVentaMouseClicked
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        // TODO add your handling code here:
-        //System.out.println("\nEl resultado de la suma es : "+obtenerTotal());
+        
         Interfaces.Ventas.txtTotal.setText(Float.toString(obtenerTotal()));
         this.dispose();
     }//GEN-LAST:event_btnAceptarActionPerformed
@@ -566,6 +571,39 @@ public class jfrmRegistrarVenta extends javax.swing.JFrame {
         ActualizarProductos();
     }//GEN-LAST:event_btnActualizarActionPerformed
 
+    private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
+        // TODO add your handling code here:
+        int key = evt.getKeyChar();
+        boolean presKey = key >= 48 && key <= 57;
+        
+        if(!presKey)
+        {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCantidadKeyTyped
+
+    boolean Revisar()
+    {
+        int valor;
+        boolean verificar = false;
+        if(txtCantidad.getText().length() > 0)
+        {
+            valor = Integer.parseInt(txtCantidad.getText());
+            verificar = true;
+            
+        }else{
+            valor = 0;
+        }
+        if(canAc == 0)
+        {
+            JOptionPane.showMessageDialog(this, "Producto aun no seleccionado");
+        }else if(valor>canAc){
+            JOptionPane.showMessageDialog(this, "Exede la cantidad de producto en Inventario : " + canAc);
+            verificar = false;
+            txtCantidad.setText(Integer.toString(canAc));
+        }
+        return verificar;
+    }
     /**
      * @param args the command line arguments
      */

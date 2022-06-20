@@ -199,6 +199,7 @@ public class jfBuscarProducto extends javax.swing.JFrame {
             {
                 jfrmRegistrarVenta.idP = Tomardatos(0);
                 jfrmRegistrarVenta.txtNombreProducto.setText(Tomardatos(1));
+                jfrmRegistrarVenta.canAc = Integer.parseInt(Tomardatos(2));
                 jfrmRegistrarVenta.txtPrecioUnidad.setText(Tomardatos(5));
                 jfrmRegistrarVenta.txtPrecentacion.setText(Tomardatos(3));
                 this.dispose();
