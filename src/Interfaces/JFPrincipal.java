@@ -60,13 +60,14 @@ public class JFPrincipal extends javax.swing.JFrame {
         setTitle("Ventana Principal");
         getContentPane().setLayout(null);
 
+        jPanel1.setBackground(new java.awt.Color(153, 153, 255));
         jPanel1.setLayout(null);
 
         jLabel2.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("MATERIALES MARICARMEN");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(80, 30, 410, 40);
+        jLabel2.setBounds(80, 10, 410, 40);
 
         btnDetalleVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Detalle_Venta.png"))); // NOI18N
         btnDetalleVenta.setText("Detalle Venta");
@@ -77,7 +78,7 @@ public class JFPrincipal extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnDetalleVenta);
-        btnDetalleVenta.setBounds(210, 80, 140, 80);
+        btnDetalleVenta.setBounds(220, 240, 140, 80);
 
         btnVentas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Venta.png"))); // NOI18N
         btnVentas.setText("Ventas");
@@ -87,7 +88,7 @@ public class JFPrincipal extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnVentas);
-        btnVentas.setBounds(30, 80, 140, 80);
+        btnVentas.setBounds(30, 240, 140, 80);
 
         btnClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Clientes.png"))); // NOI18N
         btnClientes.setText("Clientes");
@@ -97,7 +98,7 @@ public class JFPrincipal extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnClientes);
-        btnClientes.setBounds(390, 80, 140, 80);
+        btnClientes.setBounds(410, 240, 140, 80);
 
         btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Salir.png"))); // NOI18N
         btnSalir.setText("Salir");
@@ -107,7 +108,7 @@ public class JFPrincipal extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnSalir);
-        btnSalir.setBounds(230, 350, 110, 80);
+        btnSalir.setBounds(410, 350, 110, 80);
 
         btnProveedores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Proveedores.png"))); // NOI18N
         btnProveedores.setText("Proveedores");
@@ -117,7 +118,7 @@ public class JFPrincipal extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnProveedores);
-        btnProveedores.setBounds(120, 210, 140, 80);
+        btnProveedores.setBounds(30, 350, 140, 80);
 
         btnProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Productos.png"))); // NOI18N
         btnProductos.setText("Producctos");
@@ -127,13 +128,14 @@ public class JFPrincipal extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnProductos);
-        btnProductos.setBounds(300, 210, 140, 80);
+        btnProductos.setBounds(220, 350, 140, 80);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Fondos/Fondo_Ventas.png"))); // NOI18N
+        jLabel1.setBackground(new java.awt.Color(0, 153, 255));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/cementera.png"))); // NOI18N
         jLabel1.setMaximumSize(new java.awt.Dimension(570, 522));
         jLabel1.setMinimumSize(new java.awt.Dimension(570, 522));
         jPanel1.add(jLabel1);
-        jLabel1.setBounds(0, 0, 572, 460);
+        jLabel1.setBounds(170, 50, 240, 190);
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(-1, -1, 570, 460);
