@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +52,7 @@ public class Ventas extends javax.swing.JFrame {
         DesactivarBotones(false);
 
     }
+   
 
     public void Cargar(String valor) {
         String Consulta = "select * from Ventas " + "where concat(NoFolio, "
@@ -99,7 +102,7 @@ public class Ventas extends javax.swing.JFrame {
                                     
                              System.out.println("el valor es: "+ valor);
                         } catch (Exception e) {
-                           
+                           JOptionPane.showMessageDialog(this, e);
                         }
                         
                     }
@@ -155,13 +158,18 @@ public class Ventas extends javax.swing.JFrame {
 
     public String obtenerFechaHoraActual(int valorAObtener) {
         String obtenerDato;
+        LocalDateTime locaDate = LocalDateTime.now();
         if (valorAObtener == obtenerFecha) {
             obtenerDato = new SimpleDateFormat("yyyy-MM-dd").
                     format(Calendar.getInstance().getTime());
         } else {
-            obtenerDato = new SimpleDateFormat("hh:ss").
-                    format(Calendar.getInstance().getTime());
-        }
+            /*obtenerDato = new SimpleDateFormat("hh:ss").
+                    format(Calendar.getInstance().getTime());*/
+            int Hora = locaDate.getHour();
+            int Min =  locaDate.getMinute();
+            int sec = locaDate.getSecond();
+            obtenerDato = Hora + ":"+ Min + ":"+sec;
+        }  
         return obtenerDato;
     }
 
@@ -872,7 +880,9 @@ public class Ventas extends javax.swing.JFrame {
             }
             
         } catch (Exception error) {
-            JOptionPane.showMessageDialog(this, "Error: " + error.getMessage());
+            
+               JOptionPane.showMessageDialog(this, "Error: ID CLIENTE NO EXISTE"); 
+           
         }
 
         return n;

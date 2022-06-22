@@ -1,12 +1,12 @@
 package Interfaces;
 
 import Clases.ConexionMySQL;
-import static Interfaces.jfDetalleVenta.cbPresentacion;
-import java.awt.event.KeyEvent;
+import java.awt.TextField;
 import java.io.InputStream;
 import java.sql.*;
-import java.util.logging.*;
+import javafx.scene.control.TreeItem;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.util.JRLoader;
@@ -14,13 +14,22 @@ import net.sf.jasperreports.view.*;
 
 public class jfProductos extends javax.swing.JFrame {
 
+    public enum TipoDeValor{
+      Numeros, Texto, Decimal
+      
+    };
+    
     ConexionMySQL cnn = new ConexionMySQL();
     Connection cn = cnn.ConexionMySQL();
-
+    
+    TipoDeValor tipoValor;
     DefaultTableModel modelo;
+    
     int Filas;
     int idUltimoRegistro;
 
+    boolean decimal = false;
+    int decimalPos = 0;
     public jfProductos() {
         initComponents();
         Bloquear();
@@ -30,11 +39,65 @@ public class jfProductos extends javax.swing.JFrame {
         btnNuevo.setEnabled(true);
         btnBuscar.setEnabled(true);
         btnEliminar.setEnabled(false);
+        btnActualizarInventario.setEnabled(false);
         Cargar("");
 
         this.setResizable(false);
         this.setTitle("Productos");
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    boolean ValidarDatos(int key, TipoDeValor tipoDeValor, JTextField txtVerificar)
+    {
+        
+        
+        boolean numeros = false;
+        switch (tipoDeValor){
+            case Numeros:
+               
+                numeros = (key >= 48 && key <= 57);
+                if (numeros) {
+                    
+                    return true;     
+                }
+                break;
+                
+            case Decimal:
+                
+                numeros = (key >= 48 && key <= 57);
+                
+                if (key == 46 && decimal == false) {
+                    decimal = true;
+                    decimalPos = txtVerificar.getText().length();
+                } else {
+                    if (key == 8 && txtVerificar.getText().length() == decimalPos) {
+                        decimal = false;
+                        decimalPos = 0;
+                    }
+                    if (!numeros) {
+                         return true;
+                    }
+                }
+                break;
+                
+            case Texto:
+                boolean letra = (key >= 64 && key <= 90 )||(key >= 97 && key <= 122)||(key == 32);
+                String chec = txtVerificar.getText();
+                if(key == 32 && chec.length() <= 0)
+                {
+                    letra = false;
+
+                }
+
+                if(!letra){
+                    return true;
+                }
+                break;
+                
+            default: 
+                
+                break;
+        }
+        return false;
     }
 
     void Bloquear() {
@@ -96,7 +159,6 @@ public class jfProductos extends javax.swing.JFrame {
         txtIDProducto.setText("");
         txtNombre.setText("");
         txtCantidad.setText("");
-        //cbPresentacion.set("");
         txtPreciocompra.setText("");
         txtPrecioventa.setText("");
         txtIDProveedor.setText("");
@@ -106,6 +168,7 @@ public class jfProductos extends javax.swing.JFrame {
         String busqueda = "select cantidad from productos where idproducto = "+
                 idModificar;
         int cantidadactual = 0;
+       
         try {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(busqueda);
@@ -214,9 +277,41 @@ public class jfProductos extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setText("ID PROVEEDOR");
 
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
+
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyTyped(evt);
+            }
+        });
+
+        txtPreciocompra.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPreciocompraKeyTyped(evt);
+            }
+        });
+
         txtPrecioventa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPrecioventaActionPerformed(evt);
+            }
+        });
+        txtPrecioventa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioventaKeyTyped(evt);
+            }
+        });
+
+        txtIDProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIDProveedorKeyTyped(evt);
             }
         });
 
@@ -277,7 +372,7 @@ public class jfProductos extends javax.swing.JFrame {
             }
         });
 
-        btnActualizarInventario.setText("jButton1");
+        btnActualizarInventario.setText("Actualizar Inventario");
         btnActualizarInventario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnActualizarInventarioActionPerformed(evt);
@@ -289,20 +384,16 @@ public class jfProductos extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(btnActualizarInventario)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnActualizarInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -520,9 +611,7 @@ public class jfProductos extends javax.swing.JFrame {
     private void tblProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductosMouseClicked
         // TODO add your handling code here:
         int filaSele = tblProductos.getSelectedRow();
-        /*txtCantidad.setEnabled(true);
-        txtPreciocompra.setEnabled(true);
-        txtPrecioventa.setEnabled(true);*/
+        
 
         txtIDProducto.setText(tblProductos.getValueAt(filaSele, 0).toString());
         txtNombre.setText(tblProductos.getValueAt(filaSele, 1).toString());
@@ -533,7 +622,6 @@ public class jfProductos extends javax.swing.JFrame {
         txtIDProveedor.setText(tblProductos.getValueAt(filaSele, 6).toString());
 
         Filas = filaSele;
-        txtCantidad.setEnabled(true);
         txtPreciocompra.setEnabled(true);
         txtPrecioventa.setEnabled(true);
         txtIDProducto.setEnabled(false);
@@ -541,6 +629,7 @@ public class jfProductos extends javax.swing.JFrame {
         cbPresentacion.setEnabled(false);
         txtIDProveedor.setEnabled(false);
         btnActualizar.setEnabled(true);
+        btnActualizarInventario.setEnabled(true);
         Desbloquearbotones();
         
     }//GEN-LAST:event_tblProductosMouseClicked
@@ -594,6 +683,7 @@ public class jfProductos extends javax.swing.JFrame {
         btnCancelar.setEnabled(false);
         btnGuardar.setEnabled(false);
         btnActualizar.setEnabled(false);
+        btnActualizarInventario.setEnabled(false);
         btnNuevo.setEnabled(true);
         btnBuscar.setEnabled(true);
         btnEliminar.setEnabled(false);
@@ -637,12 +727,70 @@ public class jfProductos extends javax.swing.JFrame {
 
     private void btnActualizarInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarInventarioActionPerformed
         // TODO add your handling code here:
-        int cantidadAgregar = Integer.parseInt(JOptionPane.showInputDialog(this,
-                "Ingresa la cantidad comprada"));
+        String valor =  JOptionPane.showInputDialog(this,"Ingresa la cantidad comprada");
+        int cantidadAgregar = 0;
+        try {
+            if (valor.length() > 0 ){
+            cantidadAgregar = Integer.parseInt(valor);
+            if(cantidadAgregar >= 0){
+                ActualizarInventario(cantidadAgregar, txtIDProducto.getText());
+            }else{
+                JOptionPane.showMessageDialog(this,"Ingresa  valores correcto ");
+            }
+        }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Valor Ingresado es incorrecto ",
+                    "Informacion", JOptionPane.INFORMATION_MESSAGE);
+        }
         
-         ActualizarInventario(cantidadAgregar, txtIDProducto.getText());
+         
        
     }//GEN-LAST:event_btnActualizarInventarioActionPerformed
+
+    private void txtCantidadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyPressed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_txtCantidadKeyPressed
+
+    private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
+        // TODO add your handling code here:
+        int key = evt.getKeyChar();
+        if(!ValidarDatos(key, tipoValor.Numeros, txtCantidad)){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCantidadKeyTyped
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        // TODO add your handling code here:
+        int key = evt.getKeyChar();
+        if(ValidarDatos(key, tipoValor.Texto, txtNombre)){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtPreciocompraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPreciocompraKeyTyped
+        // TODO add your handling code here:
+        int key = evt.getKeyChar();
+        if(ValidarDatos(key, tipoValor.Decimal, txtPreciocompra)){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtPreciocompraKeyTyped
+
+    private void txtPrecioventaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioventaKeyTyped
+        // TODO add your handling code here:
+        int key = evt.getKeyChar();
+        if(ValidarDatos(key, tipoValor.Decimal, txtPrecioventa)){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtPrecioventaKeyTyped
+
+    private void txtIDProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDProveedorKeyTyped
+        // TODO add your handling code here:
+        int key = evt.getKeyChar();
+        if(!ValidarDatos(key, tipoValor.Numeros, txtIDProveedor)){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtIDProveedorKeyTyped
 
     /**
      * @param args the command line arguments

@@ -546,26 +546,31 @@ public class frmProveedores extends javax.swing.JFrame {
         + "( IDProveedor , NombreProveedor, "
         + "Telefono, NombreEmpresa) "
         + "values (?, ?, ?, ?)";
+        
+        if(nom.length() > 0 && tel.length() > 0 && emp.length() > 0){
+            try {
+                PreparedStatement ps = cn.prepareStatement(SQL);
+                ps.setString(1, id);
+                ps.setString(2, nom);
+                ps.setString(3, tel);
+                ps.setString(4, emp);
 
-        try {
-            PreparedStatement ps = cn.prepareStatement(SQL);
-            ps.setString(1, id);
-            ps.setString(2, nom);
-            ps.setString(3, tel);
-            ps.setString(4, emp);
-
-            int n = ps.executeUpdate();
-            if (n > 0) {
+                int n = ps.executeUpdate();
+                if (n > 0) {
+                    JOptionPane.showMessageDialog(this,
+                        "Proveedor insertado");
+                }
+                Cargar("");
+                ActualizarBotone(false);
+                Actualizarinterfaz(false);
+                VaciarCampos();
+            } catch (Exception error) {
                 JOptionPane.showMessageDialog(this,
-                    "Proveedor insertado");
+                    "Error al insertar; " + error);
             }
-            Cargar("");
-            ActualizarBotone(false);
-            Actualizarinterfaz(false);
-            VaciarCampos();
-        } catch (Exception error) {
-            JOptionPane.showMessageDialog(this,
-                "Error al insertar; " + error);
+        }else
+        {
+            JOptionPane.showMessageDialog(this, "Faltan Datos por ingresar");
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 

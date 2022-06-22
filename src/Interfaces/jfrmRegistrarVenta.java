@@ -2,7 +2,6 @@
 package Interfaces;
 
 import Clases.ConexionMySQL;
-import java.net.InterfaceAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
