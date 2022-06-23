@@ -26,7 +26,7 @@ FROM
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch">
+		<band height="70" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="14" width="555" height="49"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -34,10 +34,14 @@ FROM
 				</textElement>
 				<text><![CDATA[REPORTE: DETALLES DE VENTAS]]></text>
 			</staticText>
+			<image>
+				<reportElement x="440" y="16" width="52" height="48"/>
+				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\BRISEIDA\\OneDrive\\Documentos\\NetBeansProjects\\Cementera\\build\\classes\\Iconos\\Detalle_Venta.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch"/>
+		<band height="27" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
 		<band height="31" splitType="Stretch">

@@ -20,14 +20,18 @@ FROM
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch">
+		<band height="68" splitType="Stretch">
 			<staticText>
-				<reportElement x="68" y="16" width="444" height="42"/>
+				<reportElement x="0" y="16" width="555" height="42"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[REPORTE: CONTROL DE CLIENTES]]></text>
 			</staticText>
+			<image>
+				<reportElement x="445" y="16" width="52" height="48"/>
+				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\BRISEIDA\\OneDrive\\Documentos\\NetBeansProjects\\Cementera\\build\\classes\\Iconos\\Clientes.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>

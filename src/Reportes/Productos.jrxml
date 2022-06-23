@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PRODUCTOS" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -8,7 +8,7 @@
      productos.`IDProducto` AS productos_IDProducto,
      productos.`NombreProducto` AS productos_NombreProducto,
      productos.`Cantidad` AS productos_Cantidad,
-     productos.`IDUnidad` AS productos_IDUnidad,
+     productos.`Presentacion` AS productos_Presentacion,
      productos.`PrecioCompra` AS productos_PrecioCompra,
      productos.`PrecioVenta` AS productos_PrecioVenta,
      productos.`IDProveedor` AS productos_IDProveedor
@@ -18,7 +18,7 @@ FROM
 	<field name="productos_IDProducto" class="java.lang.Integer"/>
 	<field name="productos_NombreProducto" class="java.lang.String"/>
 	<field name="productos_Cantidad" class="java.lang.Integer"/>
-	<field name="productos_IDUnidad" class="java.lang.String"/>
+	<field name="productos_Presentacion" class="java.lang.String"/>
 	<field name="productos_PrecioCompra" class="java.math.BigDecimal"/>
 	<field name="productos_PrecioVenta" class="java.math.BigDecimal"/>
 	<field name="productos_IDProveedor" class="java.lang.Integer"/>
@@ -26,108 +26,126 @@ FROM
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="51" splitType="Stretch">
+		<band height="63" splitType="Stretch">
 			<staticText>
-				<reportElement x="125" y="13" width="291" height="20"/>
+				<reportElement x="0" y="11" width="555" height="44"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[REPORTE: PRODUCTOS]]></text>
 			</staticText>
+			<image>
+				<reportElement x="440" y="11" width="52" height="48"/>
+				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\BRISEIDA\\OneDrive\\Documentos\\NetBeansProjects\\Cementera\\build\\classes\\Iconos\\Productos.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="16" splitType="Stretch"/>
+		<band height="21" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="30" splitType="Stretch">
+		<band height="32" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="31" height="20"/>
+				<reportElement x="0" y="0" width="30" height="20"/>
 				<textElement>
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="41" y="2" width="131" height="20"/>
+				<reportElement x="40" y="0" width="109" height="20"/>
 				<textElement>
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PRODUCTO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="182" y="2" width="63" height="20"/>
+				<reportElement x="160" y="0" width="55" height="20"/>
 				<textElement>
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CANTIDAD]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="256" y="2" width="91" height="20"/>
+				<reportElement x="215" y="0" width="75" height="20"/>
 				<textElement>
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PRESENTACION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="357" y="0" width="88" height="20"/>
+				<reportElement x="301" y="0" width="82" height="20"/>
 				<textElement>
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PRECIO-COMPRA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="455" y="2" width="100" height="20"/>
+				<reportElement x="394" y="0" width="75" height="20"/>
 				<textElement>
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PRECIO-VENTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="480" y="0" width="75" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ID_PROVEEDOR]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="27" splitType="Stretch">
+		<band height="28" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="31" height="20"/>
+				<reportElement x="0" y="0" width="30" height="20"/>
 				<textElement>
-					<font fontName="Arial"/>
+					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{productos_IDProducto}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="41" y="0" width="131" height="20"/>
+				<reportElement x="40" y="0" width="109" height="20"/>
 				<textElement>
-					<font fontName="Arial"/>
+					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{productos_NombreProducto}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="182" y="0" width="63" height="20"/>
+				<reportElement x="160" y="0" width="55" height="20"/>
 				<textElement>
-					<font fontName="Arial"/>
+					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{productos_Cantidad}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="256" y="0" width="91" height="20"/>
+				<reportElement x="215" y="0" width="75" height="20"/>
 				<textElement>
-					<font fontName="Arial"/>
+					<font fontName="Arial" size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{productos_IDUnidad}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{productos_Presentacion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="357" y="0" width="88" height="20"/>
+				<reportElement x="301" y="0" width="82" height="20"/>
 				<textElement>
-					<font fontName="Arial"/>
+					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{productos_PrecioCompra}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="455" y="0" width="100" height="20"/>
+				<reportElement x="394" y="0" width="75" height="20"/>
 				<textElement>
-					<font fontName="Arial"/>
+					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{productos_PrecioVenta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="480" y="0" width="75" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{productos_IDProveedor}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

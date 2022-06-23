@@ -37,8 +37,12 @@ FROM
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[REPORTE VENTAS]]></text>
+				<text><![CDATA[REPORTE: VENTAS]]></text>
 			</staticText>
+			<image>
+				<reportElement x="404" y="20" width="52" height="48"/>
+				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\BRISEIDA\\OneDrive\\Documentos\\NetBeansProjects\\Cementera\\build\\classes\\Iconos\\Venta.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>

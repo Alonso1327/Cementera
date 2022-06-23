@@ -187,7 +187,7 @@ public class jfProductos extends javax.swing.JFrame {
         
         String Consulta = "select * from Productos "
                 + "where concat(IDProducto, NombreProducto, "
-                + "+ Cantidad , IDUnidad, PrecioCompra, PrecioVenta, IDProveedor) "
+                + "+ Cantidad , Presentacion, PrecioCompra, PrecioVenta, IDProveedor) "
                 + "like '%" + Valor + "%'";
         String[] Titulos = {"ID", "PRODUCTO", "CANTIDAD", "PRESENTACION",
             "PRECIO-COMPRA", "PRECIO-VENTA", "ID PROVEEDOR"};
@@ -202,7 +202,7 @@ public class jfProductos extends javax.swing.JFrame {
                 Registros[0] = rs.getString("IDProducto");
                 Registros[1] = rs.getString("NombreProducto");
                 Registros[2] = rs.getString("Cantidad");
-                Registros[3] = rs.getString("IDUnidad");
+                Registros[3] = rs.getString("Presentacion");
                 Registros[4] = rs.getString("PrecioCompra");
                 Registros[5] = rs.getString("PrecioVenta");
                 Registros[6] = rs.getString("IDProveedor");
@@ -567,7 +567,7 @@ public class jfProductos extends javax.swing.JFrame {
         venta = txtPrecioventa.getText();
         proveedor = txtIDProveedor.getText();
 
-        SQL = "insert into Productos (IDProducto, NombreProducto, Cantidad, IDUnidad, "
+        SQL = "insert into Productos (IDProducto, NombreProducto, Cantidad, Presentacion, "
                 + "PrecioCompra, PrecioVenta, IDProveedor) "
                 + "values(?,?,?,?,?,?,?)";
         try {
@@ -700,7 +700,7 @@ public class jfProductos extends javax.swing.JFrame {
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
         // TODO add your handling code here:
         try{
-        String Ruta = "/Reportes/producto.jasper";
+        String Ruta = "/Reportes/Productos.jasper";
             InputStream archivo = getClass().getResourceAsStream(Ruta);
             
                  JasperReport reporte = null ; 
