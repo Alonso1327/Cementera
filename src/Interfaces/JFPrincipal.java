@@ -24,7 +24,7 @@ public class JFPrincipal extends javax.swing.JFrame {
     public JFPrincipal() {
         initComponents();
         this.setResizable(false);
-        this.setBounds(570, 500, 570, 500);
+        this.setBounds(590, 500, 590, 500);
         this.setLocationRelativeTo(null);
         //this.setTitle("Ventana Principal");
     }
@@ -60,17 +60,18 @@ public class JFPrincipal extends javax.swing.JFrame {
         setTitle("Ventana Principal");
         getContentPane().setLayout(null);
 
-        jPanel1.setBackground(new java.awt.Color(153, 153, 255));
+        jPanel1.setBackground(new java.awt.Color(102, 153, 255));
         jPanel1.setLayout(null);
 
         jLabel2.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("MATERIALES MARICARMEN");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(80, 10, 410, 40);
+        jLabel2.setBounds(80, 0, 410, 40);
 
+        btnDetalleVenta.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnDetalleVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Detalle_Venta.png"))); // NOI18N
-        btnDetalleVenta.setText("Detalle Venta");
+        btnDetalleVenta.setText("DETALLE VENTA");
         btnDetalleVenta.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnDetalleVenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -78,10 +79,11 @@ public class JFPrincipal extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnDetalleVenta);
-        btnDetalleVenta.setBounds(220, 240, 140, 80);
+        btnDetalleVenta.setBounds(220, 240, 145, 80);
 
+        btnVentas.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnVentas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Venta.png"))); // NOI18N
-        btnVentas.setText("Ventas");
+        btnVentas.setText("VENTAS");
         btnVentas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVentasActionPerformed(evt);
@@ -90,8 +92,9 @@ public class JFPrincipal extends javax.swing.JFrame {
         jPanel1.add(btnVentas);
         btnVentas.setBounds(30, 240, 140, 80);
 
+        btnClientes.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Clientes.png"))); // NOI18N
-        btnClientes.setText("Clientes");
+        btnClientes.setText("CLIENTES");
         btnClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClientesActionPerformed(evt);
@@ -100,18 +103,20 @@ public class JFPrincipal extends javax.swing.JFrame {
         jPanel1.add(btnClientes);
         btnClientes.setBounds(410, 240, 140, 80);
 
+        btnSalir.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Salir.png"))); // NOI18N
-        btnSalir.setText("Salir");
+        btnSalir.setText("SALIR");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalirActionPerformed(evt);
             }
         });
         jPanel1.add(btnSalir);
-        btnSalir.setBounds(410, 350, 110, 80);
+        btnSalir.setBounds(410, 350, 140, 80);
 
+        btnProveedores.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnProveedores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Proveedores.png"))); // NOI18N
-        btnProveedores.setText("Proveedores");
+        btnProveedores.setText("PROVEEDORES");
         btnProveedores.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProveedoresActionPerformed(evt);
@@ -120,8 +125,9 @@ public class JFPrincipal extends javax.swing.JFrame {
         jPanel1.add(btnProveedores);
         btnProveedores.setBounds(30, 350, 140, 80);
 
+        btnProductos.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Productos.png"))); // NOI18N
-        btnProductos.setText("Producctos");
+        btnProductos.setText("PRODUCTOS");
         btnProductos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProductosActionPerformed(evt);
@@ -135,10 +141,10 @@ public class JFPrincipal extends javax.swing.JFrame {
         jLabel1.setMaximumSize(new java.awt.Dimension(570, 522));
         jLabel1.setMinimumSize(new java.awt.Dimension(570, 522));
         jPanel1.add(jLabel1);
-        jLabel1.setBounds(170, 50, 240, 190);
+        jLabel1.setBounds(170, 40, 240, 190);
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(-1, -1, 570, 460);
+        jPanel1.setBounds(-1, -1, 580, 460);
 
         jMenu1.setText("Pestañas");
 

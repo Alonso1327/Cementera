@@ -62,8 +62,8 @@ public class frmProveedores extends javax.swing.JFrame {
                 + " Telefono,NombreEmpresa) "
                 + "like '%" + Valor + "%' ";
 
-        String[] Titulo = {"ID Proveedor", "Nombre Proveedor",
-            "Telefono", "NombreEmpresa"};
+        String[] Titulo = {"ID ", "NOMBRE PROVEEDOR",
+            "TELEFONO", "EMPRESA"};
         String[] Registros = new String[9];
         modelo = new DefaultTableModel(null, Titulo) {
             @Override
@@ -125,7 +125,7 @@ public class frmProveedores extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(153, 153, 255));
+        jPanel1.setBackground(new java.awt.Color(102, 153, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "PROVEEDORES", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial Black", 1, 18))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -275,7 +275,7 @@ public class frmProveedores extends javax.swing.JFrame {
                     .addComponent(txtNombreProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(63, 63, 63)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(131, Short.MAX_VALUE))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -324,7 +324,7 @@ public class frmProveedores extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tblProveedores);
 
-        btnReporte.setText("Reporte");
+        btnReporte.setText("REPORTE");
         btnReporte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnReporteActionPerformed(evt);
@@ -336,26 +336,24 @@ public class frmProveedores extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(416, 416, 416)
+                .addGap(389, 389, 389)
                 .addComponent(btnReporte)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnReporte)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("CONTROL DE PROVEEDOR");
@@ -490,7 +488,7 @@ public class frmProveedores extends javax.swing.JFrame {
         try {
             PreparedStatement ps = cn.prepareStatement(SQL);
             int comp = 1;
-            comp = JOptionPane.showConfirmDialog(this, "Desea eliminar este registro");
+            comp = JOptionPane.showConfirmDialog(this, "¿Desea eliminar este registro?");
             System.out.println(comp);
             if (comp == 0) {
                 ps.execute();
@@ -570,7 +568,7 @@ public class frmProveedores extends javax.swing.JFrame {
             }
         }else
         {
-            JOptionPane.showMessageDialog(this, "Faltan Datos por ingresar");
+            JOptionPane.showMessageDialog(this, "Faltan datos por ingresar");
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
