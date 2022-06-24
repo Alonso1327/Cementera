@@ -6,6 +6,8 @@
 package Interfaces;
 
 import Clases.ConexionMySQL;
+import static Interfaces.Ventas.Productos;
+import static Interfaces.jfrmRegistrarVenta.idPActual;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -220,17 +222,24 @@ public class jfBuscarProducto extends javax.swing.JFrame {
             jfDetalleVenta.txtNombreProducto.setText(Tomardatos(1));
             jfDetalleVenta.txtPrecio.setText(Tomardatos(5));
             jfDetalleVenta.cbPresentacion.setSelectedItem(Tomardatos(3));
+            
             this.dispose();
         }else
         {
             if(Integer.parseInt(Tomardatos(2))> 0)
             {
+                if(!Productos.containsKey(Tomardatos(0))){
                 jfrmRegistrarVenta.idP = Tomardatos(0);
                 jfrmRegistrarVenta.txtNombreProducto.setText(Tomardatos(1));
                 jfrmRegistrarVenta.canAc = Integer.parseInt(Tomardatos(2));
                 jfrmRegistrarVenta.txtPrecioUnidad.setText(Tomardatos(5));
                 jfrmRegistrarVenta.txtPrecentacion.setText(Tomardatos(3));
+                idPActual = null;
                 this.dispose();
+                }else
+                {
+                    JOptionPane.showMessageDialog(this, "El producto ya esta registrado en la venta");
+                }
             }else
             {
                 JOptionPane.showMessageDialog(this, "No se cuenta con mas producto");

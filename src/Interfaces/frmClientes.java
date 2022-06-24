@@ -380,8 +380,8 @@ public class frmClientes extends javax.swing.JFrame {
         String id, nom, dir, tel;
         String SQL;
         id = txtIDCliente.getText();
-        nom = txtNombre.getText();
-        dir = txtDireccion.getText();
+        nom = txtNombre.getText().toUpperCase();
+        dir = txtDireccion.getText().toUpperCase();
         tel = txtTelefono.getText();
         System.out.println(nom.length());
         
@@ -424,8 +424,8 @@ public class frmClientes extends javax.swing.JFrame {
         int filaSele = tblClientes.getSelectedRow();
 
         txtIDCliente.setText(tblClientes.getValueAt(filaSele, 0).toString());
-        txtNombre.setText(tblClientes.getValueAt(filaSele, 1).toString());
-        txtDireccion.setText(tblClientes.getValueAt(filaSele, 2).toString());
+        txtNombre.setText(tblClientes.getValueAt(filaSele, 1).toString().toUpperCase());
+        txtDireccion.setText(tblClientes.getValueAt(filaSele, 2).toString().toUpperCase());
         txtTelefono.setText(tblClientes.getValueAt(filaSele, 3).toString());
 
         filas = filaSele;

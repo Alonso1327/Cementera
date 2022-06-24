@@ -507,9 +507,9 @@ public class frmProveedores extends javax.swing.JFrame {
 
         try {
             String sql = "update Proveedores set  "
-            + " NombreProveedor = ' " + txtNombreProveedor.getText()
+            + " NombreProveedor = ' " + txtNombreProveedor.getText().toUpperCase()
             + " ', Telefono = ' " + txtTelefono.getText()
-            + " ', NombreEmpresa = ' " + txtNombreEmpresa.getText()
+            + " ', NombreEmpresa = ' " + txtNombreEmpresa.getText().toUpperCase()
             + " ' where IDProveedor= ' " + txtIDProveedor.getText()
             + " ' ";
             PreparedStatement ps
@@ -525,10 +525,10 @@ public class frmProveedores extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this,
                 "Error " + error.getMessage());
         }
-        this.txtIDProveedor.setText(" ");
-        this.txtNombreProveedor.setText(" ");
-        this.txtTelefono.setText(" ");
-        this.txtNombreEmpresa.setText(" ");
+        this.txtIDProveedor.setText("");
+        this.txtNombreProveedor.setText("");
+        this.txtTelefono.setText("");
+        this.txtNombreEmpresa.setText("");
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -537,9 +537,9 @@ public class frmProveedores extends javax.swing.JFrame {
         String id, nom, tel, emp;
         String SQL;
         id = txtIDProveedor.getText();
-        nom = txtNombreProveedor.getText();
+        nom = txtNombreProveedor.getText().toUpperCase();
         tel = txtTelefono.getText();
-        emp = txtNombreEmpresa.getText();
+        emp = txtNombreEmpresa.getText().toUpperCase();
 
         SQL = "insert into Proveedores"
         + "( IDProveedor , NombreProveedor, "

@@ -560,7 +560,7 @@ public class jfProductos extends javax.swing.JFrame {
         String id, nombre, cantidad, unidad, compra, venta, proveedor;
         String SQL;
         id = txtIDProducto.getText();
-        nombre = txtNombre.getText();
+        nombre = txtNombre.getText().toUpperCase();
         cantidad = txtCantidad.getText();
         unidad = cbPresentacion.getSelectedItem().toString();
         compra = txtPreciocompra.getText();
@@ -601,7 +601,7 @@ public class jfProductos extends javax.swing.JFrame {
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         // TODO add your handling code here:
-        ActualizarRegistro(txtCantidad.getText());
+        ActualizarRegistro(txtCantidad.getText().toUpperCase());
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void tblProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductosMouseClicked

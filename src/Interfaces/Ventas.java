@@ -106,6 +106,7 @@ public class Ventas extends javax.swing.JFrame {
                         }
                         
                     }
+                    Productos.clear();
                     JOptionPane.showMessageDialog(this, "Venta Registrada");
                     
                 }else
@@ -597,6 +598,7 @@ public class Ventas extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (btnGuardar.isEnabled()) {
             EliminarRegistro(txtFolio.getText());
+            Productos.clear();
         }
         txtFieldsActualizar(false);
         vaciarCampos();
@@ -698,14 +700,19 @@ public class Ventas extends javax.swing.JFrame {
             buscarCliente.dispose();
             registrar.dispose();
             EliminarRegistro(txtFolio.getText());
+            Productos.clear();
             dispose();
+            
         }else if(btnNuevo.isEnabled() || btnActualizar.isEnabled()){
+            Productos.clear();
             this.dispose();
+            
         }else{
             int opcion = JOptionPane.showConfirmDialog(this,"¿Desea salir? se perdera"
                    + "la venta");
            if(opcion == 0){
                EliminarRegistro(txtFolio.getText());
+               Productos.clear();
                this.dispose();
            }
         }

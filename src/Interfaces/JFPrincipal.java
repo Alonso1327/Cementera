@@ -207,7 +207,7 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     private void miVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miVentaActionPerformed
         // TODO add your handling code here:
-        
+        venta.Cargar("");
         venta.setVisible(true);
         //venta.setResizable(false);
         //v
@@ -234,17 +234,20 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     private void miProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miProveedoresActionPerformed
         // TODO add your handling code here:
+        proveedores.Cargar("");
         proveedores.setVisible(true);
     }//GEN-LAST:event_miProveedoresActionPerformed
 
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
         // TODO add your handling code here:
+        clientes.Cargar("");
         clientes.setVisible(true);
         
     }//GEN-LAST:event_btnClientesActionPerformed
 
     private void miClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miClientesActionPerformed
         // TODO add your handling code here:
+        clientes.Cargar("");
         clientes.setVisible(true);
     }//GEN-LAST:event_miClientesActionPerformed
 
@@ -262,11 +265,13 @@ public class JFPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
+        detalleVenta.Cargar("");
         detalleVenta.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         // TODO add your handling code here:
+        productos.Cargar("");
         productos.setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
