@@ -681,7 +681,7 @@ public class Ventas extends javax.swing.JFrame {
 
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
         // TODO add your handling code here:
-
+        buscarCliente.Cargar("");
         buscarCliente.setVisible(true);
 
     }//GEN-LAST:event_btnBuscarClienteActionPerformed

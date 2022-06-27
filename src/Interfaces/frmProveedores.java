@@ -453,8 +453,12 @@ public class frmProveedores extends javax.swing.JFrame {
     private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
         // TODO add your handling code here:
         int key = evt.getKeyChar();
+        int tamano = txtTelefono.getText().length();
 
         boolean numeros = key >= 48 && key <= 57;
+        if ((tamano + 1) > 10 ){
+            numeros=false;
+        }
 
         if (!numeros) {
             evt.consume();
@@ -504,31 +508,42 @@ public class frmProveedores extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-
-        try {
-            String sql = "update Proveedores set  "
-            + " NombreProveedor = ' " + txtNombreProveedor.getText().toUpperCase()
-            + " ', Telefono = ' " + txtTelefono.getText()
-            + " ', NombreEmpresa = ' " + txtNombreEmpresa.getText().toUpperCase()
-            + " ' where IDProveedor= ' " + txtIDProveedor.getText()
-            + " ' ";
-            PreparedStatement ps
-            = cn.prepareStatement(sql);
-            ps.executeUpdate();
-            Cargar(" ");
-            JOptionPane.showMessageDialog(this,
-                "Datos actualizados");
-            ActualizarBotone(false);
-            Actualizarinterfaz(false);
-            VaciarCampos();
-        } catch (Exception error) {
-            JOptionPane.showMessageDialog(this,
-                "Error " + error.getMessage());
+        
+        String id, nom, tel, emp;
+        nom = txtNombreProveedor.getText().toUpperCase();
+        tel = txtTelefono.getText();
+        emp = txtNombreEmpresa.getText().toUpperCase();
+        
+        if(nom.length() > 0  && emp.length() > 0 && tel.length() == 10){
+            try {
+                String sql = "update Proveedores set  "
+                + " NombreProveedor = '" + txtNombreProveedor.getText().toUpperCase()
+                + " ', Telefono = '" + txtTelefono.getText()
+                + " ', NombreEmpresa = '" + txtNombreEmpresa.getText().toUpperCase()
+                + " ' where IDProveedor= '" + txtIDProveedor.getText()
+                + " ' ";
+                PreparedStatement ps
+                = cn.prepareStatement(sql);
+                ps.executeUpdate();
+                Cargar("");
+                JOptionPane.showMessageDialog(this,
+                    "Datos actualizados");
+                ActualizarBotone(false);
+                Actualizarinterfaz(false);
+                VaciarCampos();
+            } catch (Exception error) {
+                JOptionPane.showMessageDialog(this,
+                    "Error " + error.getMessage());
+                System.out.println("tamaño del numero: "+txtTelefono.getText().length());
+            }
+            this.txtIDProveedor.setText("");
+            this.txtNombreProveedor.setText("");
+            this.txtTelefono.setText("");
+            this.txtNombreEmpresa.setText("");
+        } else {
+            boolean p = nom.length() > 0  && emp.length() > 0 && tel.length() == 10;
+            System.out.println("oooo: "+ p + "\n "+nom.length()+ "\n "+tel.length()+ "\n "+emp.length());
         }
-        this.txtIDProveedor.setText("");
-        this.txtNombreProveedor.setText("");
-        this.txtTelefono.setText("");
-        this.txtNombreEmpresa.setText("");
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -546,7 +561,7 @@ public class frmProveedores extends javax.swing.JFrame {
         + "Telefono, NombreEmpresa) "
         + "values (?, ?, ?, ?)";
         
-        if(nom.length() > 0 && tel.length() > 0 && emp.length() > 0){
+        if(nom.length() > 0 && tel.length() == 10 && emp.length() > 0){
             try {
                 PreparedStatement ps = cn.prepareStatement(SQL);
                 ps.setString(1, id);
@@ -569,7 +584,7 @@ public class frmProveedores extends javax.swing.JFrame {
             }
         }else
         {
-            JOptionPane.showMessageDialog(this, "Faltan datos por ingresar");
+            JOptionPane.showMessageDialog(this, "Faltan datos por ingresar o Numero de telefon no valido");
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 

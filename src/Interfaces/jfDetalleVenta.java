@@ -369,10 +369,10 @@ public class jfDetalleVenta extends javax.swing.JFrame {
         });
 
         txtBuscarDetalle.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 txtBuscarDetalleInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         txtBuscarDetalle.addActionListener(new java.awt.event.ActionListener() {

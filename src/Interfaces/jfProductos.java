@@ -338,7 +338,7 @@ public class jfProductos extends javax.swing.JFrame {
             }
         });
 
-        btnActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/actualizar.png"))); // NOI18N
+        btnActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/actualizar_DV.png"))); // NOI18N
         btnActualizar.setText("ACTUALIZAR");
         btnActualizar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnActualizar.addActionListener(new java.awt.event.ActionListener() {
