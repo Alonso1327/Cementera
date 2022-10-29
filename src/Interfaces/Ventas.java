@@ -1,6 +1,7 @@
 package Interfaces;
 
 import Clases.ConexionMySQL;
+import Clases.OnlyDisplay;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +22,7 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 public class Ventas extends javax.swing.JFrame {
-
+    OnlyDisplay display = new OnlyDisplay();
     int obtenerFecha = 1;
     int obtenerHora = 2;
     int contador = 0;
@@ -50,6 +51,8 @@ public class Ventas extends javax.swing.JFrame {
         tblVenta.getTableHeader().setReorderingAllowed(false);
         this.setResizable(false);
         DesactivarBotones(false);
+        //total = "5983.0";
+        display.EnviarDatos_DISPLAY(total);
 
     }
    
@@ -522,6 +525,7 @@ public class Ventas extends javax.swing.JFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         ActualizarRegistro();
+        display.EnviarDatos_DISPLAY(total);
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
@@ -558,6 +562,8 @@ public class Ventas extends javax.swing.JFrame {
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
         vaciarCampos();
+        //System.out.println("El valor de total en ventas es :"+ total);
+        display.EnviarDatos_DISPLAY(" ");
 
         ftxtFecha.setText(obtenerFechaHoraActual(obtenerFecha));
         txtHora.setText(obtenerFechaHoraActual(obtenerHora));
@@ -818,7 +824,8 @@ public class Ventas extends javax.swing.JFrame {
         this.txtHora.setText("00:00");
         this.ftxtFecha.setText("2022/04/06");
         this.txtIDCliente.setText("");
-        this.txtTotal.setText(" ");
+        this.txtTotal.setText("");
+        //total = "";
     }
 
     private void txtFieldsActualizar(boolean realizar) {
