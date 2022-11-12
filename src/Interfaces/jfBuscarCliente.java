@@ -230,11 +230,13 @@ public class jfBuscarCliente extends javax.swing.JFrame {
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         // TODO add your handling code here:
         String datoId = tblBuscarCliente.getValueAt(fila, 0).toString();
+        String nombrecli=tblBuscarCliente.getValueAt(fila, 1).toString();
         //if(datoId.length()<0)
         //{
             //JOptionPane.showConfirmDialog(this,"Usted no a seleccionado ningun cliente");
         //}else{
-            Interfaces.Ventas.txtIDCliente.setText(datoId);
+            Interfaces.Ventas.obtenerIDcliente=datoId;
+            Interfaces.Ventas.txtIDCliente.setText(nombrecli);
             this.setVisible(false);
             this.dispose();
         //}
