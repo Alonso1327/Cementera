@@ -15,3 +15,6 @@ Permite automatizar procesos de **gestión de inventarios, ventas y generación 
 - **SQL** -> Gestión de base de datos
 
 ## Capturas de pantalla
+<img width="582" height="493" alt="image" src="https://github.com/user-attachments/assets/b860bfb4-ecb6-45f0-88e6-2a7973350371" />
+
+
